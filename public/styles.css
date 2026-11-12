@@ -526,3 +526,53 @@ body { font-family:var(--font); font-feature-settings:'ss01' on; -webkit-font-sm
 .how-foot{display:flex;gap:20px;align-items:center;justify-content:space-between;min-height:84px;border-top:1px solid var(--line);font:600 11px var(--font);color:#e4bdcc;}
 .how-foot strong{color:white;font-family:var(--display);}
 @media(max-width:650px){.how-shell{padding:0 19px}.how-head{min-height:85px}.how-brand img{width:104px;height:65px}.how-brand small{display:none}.how-back{font-size:11px;padding:10px}.how-body{padding:80px 0}.how-panel h1{font-size:clamp(39px,10vw,62px);letter-spacing:-.055em}.how-foot{align-items:flex-start;flex-direction:column;padding:20px 0;gap:8px}}
+
+
+/* KINOCLUB V5: author credit directly below the clapper */
+.header .brand { position:relative; }
+.header .brand-sub {
+  display:block;
+  position:absolute;
+  left:118px;
+  top:65px;
+  z-index:4;
+  margin:0;
+  width:109px;
+  max-width:109px;
+  transform:none;
+  font:700 7.5px/1.23 var(--font);
+  letter-spacing:.035em;
+  text-align:left;
+  color:#f3dfe2;
+  pointer-events:none;
+}
+@media(max-width:1180px) and (min-width:851px){
+  .header .brand-sub {
+    display:block;
+    left:100px;
+    top:59px;
+    width:105px;
+    max-width:105px;
+    font-size:7px;
+  }
+}
+@media(max-width:850px){
+  .header .brand-sub {
+    display:block;
+    left:79px;
+    top:49px;
+    width:98px;
+    max-width:98px;
+    font-size:6.5px;
+    line-height:1.18;
+  }
+}
+@media(max-width:360px){
+  .header .brand-sub {
+    left:77px;
+    top:48px;
+    width:95px;
+    max-width:95px;
+    font-size:6.3px;
+  }
+}
