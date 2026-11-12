@@ -204,3 +204,17 @@ function initLaunchCountdown(){
   update();
   handle=setInterval(update,1000);
 }
+
+
+
+/* If a third-party film still is blocked, show a different unlettered still rather than a broken icon. */
+(function(){
+ const still=document.querySelector('.launch-film-intern .launch-poster-image');
+ if(!still)return;
+ const backup='https://www.aceshowbiz.com/images/still/the-intern08.jpg';
+ still.addEventListener('error',function(){
+   if(this.dataset.backupUsed)return;
+   this.dataset.backupUsed='1';
+   this.src=backup;
+ });
+})();

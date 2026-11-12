@@ -802,3 +802,35 @@ body { font-family:var(--font); font-feature-settings:'ss01' on; -webkit-font-sm
 @media(prefers-reduced-motion:reduce){
  .launch-poster-image,.launch-cta-premiere::before,.launch-cta-film i{transition:none;}
 }
+
+
+/* V13 – relaxed one-piece join button, transparent clapper, clean film still. */
+.launch-cover-intern .launch-poster-image{object-position:50% 50%;}
+.launch-cta-clean{
+ position:relative;isolation:isolate;overflow:visible;display:inline-flex;align-items:center;justify-content:space-between;gap:24px;
+ min-width:245px;min-height:56px;padding:11px 16px 11px 22px;
+ border:1px solid #ffc0d0;border-radius:13px;
+ background:linear-gradient(115deg,#f7779a,#f59eb4);
+ color:#2d1421;box-shadow:0 9px 22px #ed436536,inset 0 1px #fff7;
+ font:800 14px/1 var(--font);letter-spacing:-.018em;
+ transition:background .2s ease,transform .2s ease,box-shadow .2s ease;
+}
+.launch-cta-clean::before,.launch-cta-clean::after{content:none;}
+.launch-cta-clean:hover{
+ background:linear-gradient(115deg,#f88fa9,#ffb2c6);
+ transform:translateY(-2px);box-shadow:0 13px 28px #ed43654d;
+}
+.launch-cta-clean .launch-cta-copy{flex:1;color:inherit;position:relative;z-index:1;white-space:nowrap;text-align:left;}
+.launch-cta-clapper{position:relative;flex:0 0 28px;width:28px;height:28px;display:block;opacity:.9;background:transparent;border:0;box-shadow:none;}
+.launch-cta-clapper::before{content:"";position:absolute;left:3px;bottom:3px;width:23px;height:15px;box-sizing:border-box;
+ background:transparent;border:1.7px solid currentColor;border-radius:2px;}
+.launch-cta-clapper i{position:absolute;top:4px;left:3px;width:23px;height:7px;display:block;box-sizing:border-box;
+ border:1.5px solid currentColor;border-radius:2px;
+ background:repeating-linear-gradient(120deg,currentColor 0 4px,transparent 4px 8px);
+ transform-origin:left bottom;transform:rotate(-18deg);transition:transform .22s ease;}
+.launch-cta-clean:hover .launch-cta-clapper i{transform:rotate(-35deg);}
+@media(max-width:650px){
+ .launch-cta-clean{min-width:min(230px,100%);min-height:54px;padding:10px 14px 10px 17px;font-size:13px;gap:15px;}
+ .launch-cta-clapper{flex-basis:27px;width:27px;height:27px;}
+}
+@media(prefers-reduced-motion:reduce){.launch-cta-clean,.launch-cta-clapper i{transition:none;}}
