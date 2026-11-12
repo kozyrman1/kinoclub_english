@@ -74,6 +74,41 @@ function initIntro(){
   // Даже при сетевой ошибке главная страница останется доступна.
   setTimeout(()=>{progressDone=true;clearInterval(progressTimer);update(100);closeIntro()},6500);
 }
+
+// A single continuous one-line marquee. Clones follow the *exact* width of the first run.
+function initSeamlessTicker(){
+  const track=$('#tickerTrack');
+  const viewport=track?.closest('.marquee');
+  if(!track||!viewport)return;
+  const original=track.querySelector('.ticker-run');
+  if(!original)return;
+  const template=original.cloneNode(true);
+  let lastWidth=0;
+  function rebuild(){
+    const viewportWidth=viewport.getBoundingClientRect().width;
+    if(Math.abs(viewportWidth-lastWidth)<1 && track.children.length>1)return;
+    lastWidth=viewportWidth;
+    track.replaceChildren(template.cloneNode(true));
+    track.style.animation='none';
+    const unit=track.firstElementChild;
+    const width=unit.getBoundingClientRect().width;
+    if(!width)return;
+    const repetitions=Math.max(2,Math.ceil(viewportWidth/width)+2);
+    for(let i=1;i<repetitions;i++){
+      const clone=template.cloneNode(true);
+      clone.setAttribute('aria-hidden','true');
+      track.append(clone);
+    }
+    track.style.setProperty('--ticker-distance',`${width}px`);
+    track.style.setProperty('--ticker-time',`${Math.max(16,width/65).toFixed(1)}s`);
+    void track.offsetWidth;
+    track.style.animation='';
+  }
+  rebuild();
+  document.fonts?.ready.then(()=>{lastWidth=0;rebuild()}).catch(()=>{});
+  window.addEventListener('resize',()=>{lastWidth=0;rebuild()},{passive:true});
+}
+
 function onCardKey(e){const card=e.target.closest('[data-id]');if(card && (e.key==='Enter'||e.key===' ')){e.preventDefault();openMovie(card.dataset.id)}}
 function onNavigate(key){if(key==='collection'||key==='method'){closeMenu();document.getElementById(key)?.scrollIntoView({behavior:'smooth'})}else if(key==='auth')showAuth();else if(key==='settings')openDialog('settings');else if(key==='feedback')openDialog('feedback')}
 async function handleAuth(e){e.preventDefault();const form=e.currentTarget;const btn=form.querySelector('button[type=submit]');const email=form.email.value.trim();const password=form.password.value;const output=$('#authError');output.classList.remove('success');output.textContent='';btn.disabled=true;try{const result=await api(model.authMode==='register'?'register':'login',{method:'POST',body:JSON.stringify({email,password})});model.me=result.user;model.settings={...defaults,...result.user.settings};renderAuth();applySettings();form.reset();closeDialog('auth');toast(model.authMode==='register'?'Аккаунт создан. Добро пожаловать!':'Вы вошли в КиноКлуб!')}catch(err){output.textContent=err.message}finally{btn.disabled=false}}
@@ -92,14 +127,14 @@ window.addEventListener('message',event=>{
   if(!card)return;
   if(msg.event==='onReady'){
     event.source.postMessage(JSON.stringify({event:'command',func:'mute',args:[]}),event.origin);
-    event.source.postMessage(JSON.stringify({event:'command',func:'playVideo',args:[]}),event.origin);
+    event.source.postMessage(JSON.stringify({event:'command',func:'playVideo',args:[]}),event.origin);setTimeout(()=>{try{event.source.postMessage(JSON.stringify({event:'command',func:'playVideo',args:[]}),event.origin)}catch{}},900);
   }
-  if(msg.event==='onStateChange' && msg.info===1)card.classList.add('video-playing');
-  if(msg.event==='onError')card.classList.remove('video-playing');
+  if(msg.event==='onStateChange' && msg.info===1){card.classList.add('video-playing');card.dataset.previewStatus='playing'}
+  if(msg.event==='onError'){card.classList.remove('video-playing');card.dataset.previewStatus='poster'}
 });
 function startHeroPreviews(){
   if(heroPreviewsOn)return;
-  if(model.settings.reducedMotion||matchMedia('(prefers-reduced-motion:reduce)').matches||navigator.connection?.saveData)return;
+  if(model.settings.reducedMotion||navigator.connection?.saveData)return;
   heroPreviewsOn=true;
   $$('.screen-card').forEach((card,index)=>{
     const movie=MOVIES.find(m=>m.id===card.dataset.id);
@@ -109,14 +144,14 @@ function startHeroPreviews(){
     frame.tabIndex=-1;
     frame.title='Беззвучный видеофон: '+movie.title;
     frame.loading='eager';
-    frame.allow='autoplay; encrypted-media; picture-in-picture';
+    frame.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';
     frame.referrerPolicy='strict-origin-when-cross-origin';
     frame.setAttribute('aria-hidden','true');
     const origin=encodeURIComponent(location.origin);
     frame.src=`https://www.youtube-nocookie.com/embed/${movie.youtube}?autoplay=1&mute=1&controls=0&playsinline=1&loop=1&playlist=${movie.youtube}&disablekb=1&fs=0&iv_load_policy=3&cc_load_policy=0&rel=0&enablejsapi=1&origin=${origin}`;
     frame.addEventListener('load',()=>{
       const listen=()=>frame.contentWindow?.postMessage(JSON.stringify({event:'listening',id:movie.id}),'https://www.youtube-nocookie.com');
-      listen();setTimeout(listen,500);setTimeout(listen,1800);
+      listen();[350,900,1800,3000,4900].forEach(delay=>setTimeout(listen,delay));
     });
     const holder=card.querySelector('.screen-image');
     holder.append(frame);
@@ -134,7 +169,7 @@ function observeHeroPreviews(){
   },{threshold:.08});
   observer.observe(scene);
 }
-function attach(){initIntro();const brand=$('.brand');let brandClapTimer;brand.addEventListener('pointerdown',()=>{brand.classList.remove('is-clapping');void brand.offsetWidth;brand.classList.add('is-clapping');clearTimeout(brandClapTimer);brandClapTimer=setTimeout(()=>brand.classList.remove('is-clapping'),1100)});$('#helpTop').onclick=()=>openDialog('help');$('#helpContact').onclick=()=>{closeDialog('help');openDialog('feedback')};$('#menuToggle').onclick=()=>model.menuOpen?closeMenu():openMenu();$('#scrim').onclick=closeMenu;$$('[data-close=menu]').forEach(b=>b.onclick=closeMenu);$$('[data-nav]').forEach(b=>b.onclick=()=>onNavigate(b.dataset.nav));$$('dialog').forEach(d=>d.addEventListener('click',e=>{if(e.target===d)d.close()}));$$('[data-close]').filter(b=>b.dataset.close!=='menu').forEach(b=>b.onclick=()=>closeDialog(b.dataset.close));$('#videoDialog').addEventListener('close',()=>$('#videoFrame').replaceChildren());$('#loginTop').onclick=showAuth;$('#joinButton').onclick=()=>{if(model.me){openDialog('settings')}else{setAuthMode('register');openDialog('auth')}};$('#showHow').onclick=()=>$('#method').scrollIntoView({behavior:'smooth'});$('#footerFeedback').onclick=()=>openDialog('feedback');$('#tabLogin').onclick=()=>setAuthMode('login');$('#tabRegister').onclick=()=>setAuthMode('register');$('#authForm').onsubmit=handleAuth;$('#saveSettings').onclick=handleSaveSettings;$('#logoutButton').onclick=logout;$('#feedbackForm').onsubmit=handleFeedback;$('#nextVideo').onclick=()=>openMovie(MOVIES[(model.currentMovie+1)%MOVIES.length].id);$$('.filter').forEach(b=>b.onclick=()=>{$$('.filter').forEach(x=>x.classList.remove('active'));b.classList.add('active');model.filter=b.dataset.filter;renderCatalog()});$('#catalogSearch').oninput=renderCatalog;$('#catalogGrid').addEventListener('click',e=>{const card=e.target.closest('.movie-card');if(card)openMovie(card.dataset.id)});$('#catalogGrid').addEventListener('keydown',onCardKey);$$('.screen-card').forEach(c=>{c.onclick=()=>openMovie(c.dataset.id);c.onkeydown=onCardKey});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()});
+function attach(){initIntro();initSeamlessTicker();const brand=$('.brand');let brandClapTimer;const clapBrand=()=>{brand.classList.remove('is-clapping');void brand.offsetWidth;brand.classList.add('is-clapping');clearTimeout(brandClapTimer);brandClapTimer=setTimeout(()=>brand.classList.remove('is-clapping'),1300)};brand.addEventListener('pointerenter',clapBrand);brand.addEventListener('pointerdown',clapBrand);brand.addEventListener('focusin',clapBrand);$('#helpTop').onclick=()=>openDialog('help');$('#helpContact').onclick=()=>{closeDialog('help');openDialog('feedback')};$('#menuToggle').onclick=()=>model.menuOpen?closeMenu():openMenu();$('#scrim').onclick=closeMenu;$$('[data-close=menu]').forEach(b=>b.onclick=closeMenu);$$('[data-nav]').forEach(b=>b.onclick=()=>onNavigate(b.dataset.nav));$$('dialog').forEach(d=>d.addEventListener('click',e=>{if(e.target===d)d.close()}));$$('[data-close]').filter(b=>b.dataset.close!=='menu').forEach(b=>b.onclick=()=>closeDialog(b.dataset.close));$('#videoDialog').addEventListener('close',()=>$('#videoFrame').replaceChildren());$('#loginTop').onclick=showAuth;$('#joinButton').onclick=()=>{if(model.me){openDialog('settings')}else{setAuthMode('register');openDialog('auth')}};$('#showHow').onclick=()=>$('#method').scrollIntoView({behavior:'smooth'});$('#footerFeedback').onclick=()=>openDialog('feedback');$('#tabLogin').onclick=()=>setAuthMode('login');$('#tabRegister').onclick=()=>setAuthMode('register');$('#authForm').onsubmit=handleAuth;$('#saveSettings').onclick=handleSaveSettings;$('#logoutButton').onclick=logout;$('#feedbackForm').onsubmit=handleFeedback;$('#nextVideo').onclick=()=>openMovie(MOVIES[(model.currentMovie+1)%MOVIES.length].id);$$('.filter').forEach(b=>b.onclick=()=>{$$('.filter').forEach(x=>x.classList.remove('active'));b.classList.add('active');model.filter=b.dataset.filter;renderCatalog()});$('#catalogSearch').oninput=renderCatalog;$('#catalogGrid').addEventListener('click',e=>{const card=e.target.closest('.movie-card');if(card)openMovie(card.dataset.id)});$('#catalogGrid').addEventListener('keydown',onCardKey);$$('.screen-card').forEach(c=>{c.onclick=()=>openMovie(c.dataset.id);c.onkeydown=onCardKey});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()});
   // Gentle cursor depth on desktop; automatically disabled for reduced motion.
   const scene=$('#screenScene');scene.addEventListener('pointermove',e=>{if(matchMedia('(prefers-reduced-motion:reduce)').matches||model.settings.reducedMotion||!matchMedia('(min-width:850px)').matches)return;const box=scene.getBoundingClientRect();const x=(e.clientX-box.left)/box.width-.5,y=(e.clientY-box.top)/box.height-.5;$$('.screen-card').forEach((card,index)=>{card.style.translate=`${x*(index%2===0?-12:12)}px ${y*(index<2?-10:10)}px`})});scene.addEventListener('pointerleave',()=>$$('.screen-card').forEach(c=>c.style.translate='0px 0px'));}
 renderCatalog();monitorImages();attach();syncUser();

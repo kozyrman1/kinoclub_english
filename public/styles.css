@@ -422,3 +422,44 @@ body { font-family:var(--font); font-feature-settings:'ss01' on; -webkit-font-sm
 /* Posters are clean when a provider blocks autoplay: no second giant title behind film names. */
 .screen-card .screen-fallback > span { opacity:0; }
 .screen-card .screen-fallback::after {content:'';position:absolute;inset:-25%;background:radial-gradient(ellipse at 58% 37%,rgba(255,255,255,.16),transparent 49%);mix-blend-mode:screen;pointer-events:none;}
+
+/* ===== UX CORRECTION V3: navigation, video previews, seamless ticker, footer ===== */
+.header{gap:clamp(8px,1vw,18px);}
+.header-links{display:flex!important;align-items:center;gap:clamp(7px,.75vw,11px);margin-left:auto;flex-wrap:nowrap;}
+.header-nav-btn,.login-cta{visibility:visible;white-space:nowrap;flex-shrink:0;}
+.header-nav-btn{background:rgba(255,255,255,.085);border:1px solid rgba(255,244,245,.36);box-shadow:inset 0 1px rgba(255,255,255,.08);border-radius:12px;padding:0 19px;min-height:47px;font-size:12px;}
+.header-nav-btn:hover{border-color:#ff8da5;background:#381a2a;}
+.header-help{width:auto;min-width:unset;font-size:12px;gap:7px;padding:0 14px;}
+.help-mark{display:inline-grid;place-items:center;width:19px;height:19px;border:1.5px solid #ffb3c3;border-radius:50%;font-size:12px;line-height:1;}
+.login-cta{border-radius:12px;min-height:47px;font-size:13px;box-shadow:0 4px 22px #fa20465c, inset 0 1px #fff5;}
+.header .dots-button{height:47px;width:47px;border-radius:12px;}
+.brand-logo-wrap{overflow:visible;}
+.brand .brand-clapper{right:-18px;top:1px;width:41px;height:39px;transform:rotate(7deg);z-index:3;}
+.brand-clapper .mini-clap-top{width:40px;height:13px;top:8px;background:repeating-linear-gradient(130deg,#fff 0 8px,#161018 8px 16px);transform-origin:3px 100%;}
+.brand-clapper .mini-clap-base{inset:14px 1px 0;}
+@keyframes kinoclubSnapV3 {0%,100%{transform:rotate(-32deg)}18%{transform:rotate(-58deg)}49%{transform:rotate(0deg)}61%{transform:rotate(-7deg)}80%{transform:rotate(-34deg)}}
+.brand:hover .mini-clap-top,.brand:focus-visible .mini-clap-top,.brand.is-clapping .mini-clap-top{animation:kinoclubSnapV3 1.15s cubic-bezier(.25,.1,.25,1) 1 both!important;}
+/* The unchanged movie art remains moving when third-party autoplay is blocked. */
+@keyframes previewDrift {0%{transform:translate3d(-1.5%,0,0) scale(1.04)}50%{transform:translate3d(1.5%,-1.3%,0) scale(1.1)}100%{transform:translate3d(-1.5%,0,0) scale(1.04)}}
+.screen-card:not(.video-playing) .screen-image img.loaded{animation:previewDrift 16s ease-in-out infinite;transform-origin:50% 40%;}
+.screen-card:nth-child(2):not(.video-playing) .screen-image img.loaded{animation-delay:-4s;}
+.screen-card:nth-child(3):not(.video-playing) .screen-image img.loaded{animation-delay:-8s;}
+.screen-card:nth-child(4):not(.video-playing) .screen-image img.loaded{animation-delay:-12s;}
+.screen-card.video-playing .screen-image iframe.preview-motion{opacity:1;}
+/* Track cannot wrap into a second row. Two or more identical *horizontal* runs are joined edge-to-edge. */
+.marquee{height:100px;overflow:hidden;display:flex;align-items:center;white-space:nowrap;background:#fd2448;transform:rotate(-1.4deg) scale(1.02);contain:paint;}
+.ticker-track{display:flex;align-items:center;flex-wrap:nowrap;width:max-content;flex:0 0 auto;white-space:nowrap;will-change:transform;animation:tickerSlideV3 var(--ticker-time,24s) linear infinite;}
+.ticker-run{display:inline-flex;flex:0 0 auto;flex-wrap:nowrap;align-items:center;width:max-content;white-space:nowrap;gap:0;line-height:1;}
+.ticker-word{font:900 clamp(36px,4.7vw,66px)/1 var(--font);color:#fff9fa;letter-spacing:-.078em;white-space:nowrap;display:inline-block;flex-shrink:0;}
+.ticker-clap{display:inline-block;flex:0 0 auto;width:.61em;height:.53em;min-width:27px;min-height:22px;margin:0 clamp(24px,2.2vw,40px);position:relative;transform:rotate(-10deg);font-size:clamp(36px,4.7vw,66px);}
+.ticker-clap::before{content:'';position:absolute;top:0;left:0;width:100%;height:35%;box-sizing:border-box;border:2px solid #160a15;border-radius:2px;background:repeating-linear-gradient(130deg,#fff 0 9px,#1d101b 9px 18px);transform:rotate(-14deg);transform-origin:left bottom;}
+.ticker-clap::after{content:'';position:absolute;top:33%;left:0;width:100%;height:64%;border:2px solid #160a15;border-radius:2px;background:#201320;box-shadow:inset 0 0 0 2px #fffbf8;box-sizing:border-box;}
+@keyframes tickerSlideV3 {to{transform:translate3d(calc(-1 * var(--ticker-distance,900px)),0,0)}}
+.footer-logo{display:flex;flex-direction:column;gap:5px;}
+.footer-logo strong{font-family:var(--display);font-size:clamp(21px,2.15vw,33px);font-weight:800;letter-spacing:-.077em;line-height:1.25;text-transform:none;}
+.footer-logo small{font:600 clamp(10px,.96vw,13px)/1.45 var(--font);letter-spacing:.024em;color:#ffdce4;text-transform:none;}
+@media(max-width:1180px){.header-nav-btn{min-height:43px;font-size:11px;padding:0 11px;}.login-cta{min-height:43px;font-size:12px;padding:9px 14px;}.header-help{font-size:11px;padding:0 11px;}.header .dots-button{width:43px;height:43px;}}
+@media(max-width:850px){.header{height:140px;grid-template-rows:66px 45px;padding:8px 20px 11px;}.header-links{display:flex!important;justify-content:flex-start;gap:8px;width:100%;}.header-nav-btn{padding:0 13px;min-height:43px;font-size:11px;}.header-help{font-size:11px;}.hero{padding-top:171px;}}
+@media(max-width:520px){.header{height:140px;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:65px 45px;padding:8px 15px 10px;}.header-links{gap:6px;}.header-nav-btn{padding:0 11px;min-height:41px;font-size:10px;}.header-help{font-size:10px;padding:0 9px;}.help-mark{height:17px;width:17px;font-size:10px;}.login-cta{min-height:41px;}.header .dots-button{height:41px;width:41px;}.hero{padding-top:174px;}.marquee{height:77px;}.ticker-word{font-size:34px;}.ticker-clap{font-size:34px;min-width:22px;min-height:19px;margin:0 19px;}.footer-logo strong{font-size:25px;}.footer-logo small{font-size:11px;}}
+@media(max-width:360px){.header{padding-left:9px;padding-right:9px;}.header-links{gap:4px;}.header-nav-btn{font-size:9px;padding:0 8px;}.header-help{padding:0 6px;}.login-cta{padding:8px 10px;}}
+@media(prefers-reduced-motion:reduce){.ticker-track{animation:none;}.screen-card:not(.video-playing) .screen-image img.loaded{animation:none;}}

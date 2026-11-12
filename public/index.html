@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800;900&family=Unbounded:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/styles.css?v=kinoclub-nav-ticker-3" />
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -47,7 +47,7 @@
     <nav class="header-links" aria-label="Основная навигация">
       <a class="header-nav-btn" href="#collection">Каталог</a>
       <a class="header-nav-btn" href="#method">Как это работает</a>
-      <button type="button" class="header-nav-btn header-help" id="helpTop" aria-label="Помощь: как устроен КиноКлуб" title="Помощь">?</button>
+      <button type="button" class="header-nav-btn header-help" id="helpTop" aria-label="Помощь: как устроен КиноКлуб"><span class="help-mark" aria-hidden="true">?</span> Помощь</button>
     </nav>
     <div class="header-actions">
       <button class="login-cta" id="loginTop">Войти <span>↗</span></button>
@@ -98,7 +98,16 @@
       </div>
     </section>
 
-    <div class="marquee" aria-label="Watch it, Hear it, Say it, Learn it"><div class="marquee-track"><div class="marquee-group"><span class="marquee-word">WATCH IT</span><span class="marquee-clap" aria-hidden="true"></span><span class="marquee-word">HEAR IT</span><span class="marquee-clap" aria-hidden="true"></span><span class="marquee-word">SAY IT</span><span class="marquee-clap" aria-hidden="true"></span><span class="marquee-word">LEARN IT</span><span class="marquee-clap" aria-hidden="true"></span></div><div class="marquee-group"><span class="marquee-word">WATCH IT</span><span class="marquee-clap" aria-hidden="true"></span><span class="marquee-word">HEAR IT</span><span class="marquee-clap" aria-hidden="true"></span><span class="marquee-word">SAY IT</span><span class="marquee-clap" aria-hidden="true"></span><span class="marquee-word">LEARN IT</span><span class="marquee-clap" aria-hidden="true"></span></div></div></div>
+    <div class="marquee" aria-label="Watch it, Hear it, Say it, Learn it">
+      <div class="ticker-track" id="tickerTrack">
+        <div class="ticker-run">
+          <span class="ticker-word">WATCH IT</span><span class="ticker-clap" aria-hidden="true"></span>
+          <span class="ticker-word">HEAR IT</span><span class="ticker-clap" aria-hidden="true"></span>
+          <span class="ticker-word">SAY IT</span><span class="ticker-clap" aria-hidden="true"></span>
+          <span class="ticker-word">LEARN IT</span><span class="ticker-clap" aria-hidden="true"></span>
+        </div>
+      </div>
+    </div>
 
     <section class="catalog section-wrap" id="collection">
       <div class="section-head"><div><h2>ВЫБИРАЙТЕ<br/><span>СВОЮ ИСТОРИЮ.</span></h2></div><p>Любимый фильм может стать вашим лучшим учебником. Начните с истории, которую хочется пересматривать.</p></div>
@@ -111,7 +120,7 @@
     <section class="join-section section-wrap"><div class="join-inner"><span class="section-kicker">THE NEXT SCENE IS YOURS.</span><h2>ПОРА ВЫЙТИ<br/><em>В КАДР.</em></h2><p>Создайте аккаунт, выберите свою историю и начните путешествие в английский.</p><button class="light-btn" id="joinButton">Присоединиться <span>↗</span></button><div class="join-stamp">ENGLISH<br/>IS A<br/>MOVIE ✳</div></div></section>
   </main>
 
-  <footer class="footer"><div class="footer-logo"><strong>КИНО<span>КЛУБ.</span></strong><small>ПРОЕКТ ЛЮДМИЛЫ МАНДЕЛЬ</small></div><div class="footer-links"><a href="#collection">Каталог</a><a href="#method">О проекте</a><button id="footerFeedback">Обратная связь</button></div><div class="footer-copy"><div class="footer-copyright">© 2026 КИНОКЛУБ</div><a class="studio-credit" href="https://idp-studio.onrender.com/" target="_blank" rel="noopener noreferrer" aria-label="Разработано IDP Studio — открыть сайт студии"><span>Разработано</span> <strong>IDP <em>STUDIO</em> <span aria-hidden="true">↗</span></strong></a></div></footer>
+  <footer class="footer"><div class="footer-logo"><strong>Кино<span>Клуб.</span></strong><small>Проект Людмилы Мандель</small></div><div class="footer-links"><a href="#collection">Каталог</a><a href="#method">О проекте</a><button id="footerFeedback">Обратная связь</button></div><div class="footer-copy"><div class="footer-copyright">© 2026 КИНОКЛУБ</div><a class="studio-credit" href="https://idp-studio.onrender.com/" target="_blank" rel="noopener noreferrer" aria-label="Разработано IDP Studio — открыть сайт студии"><span>Разработано</span> <strong>IDP <em>STUDIO</em> <span aria-hidden="true">↗</span></strong></a></div></footer>
 
   <dialog id="helpDialog" class="modal help-modal" aria-labelledby="helpTitle"><button class="modal-x" data-close="help" aria-label="Закрыть">✕</button><div class="modal-overline">WELCOME TO KINOCLUB / HELP</div><h2 id="helpTitle">КАК ЭТО <span>РАБОТАЕТ?</span></h2><p class="modal-subtitle">КиноКлуб — это английский через любимые сцены и настоящую речь героев.</p><div class="help-steps"><div><b>01</b><span>Смотрите</span><small>Выбирайте фильм или сериал в каталоге.</small></div><div><b>02</b><span>Слушайте</span><small>Разбирайте живую речь, редукции и интонацию.</small></div><div><b>03</b><span>Говорите</span><small>Тренируйте произношение и используйте фразы в своей жизни.</small></div></div><button type="button" class="primary-btn submit-btn" id="helpContact">Задать вопрос <span>↗</span></button></dialog>
 
@@ -123,6 +132,6 @@
 
   <dialog id="videoDialog" class="video-modal"><div class="video-top"><div><span id="videoEyebrow">NOW PLAYING</span><h2 id="videoName">Название</h2></div><button class="video-close" data-close="video" aria-label="Закрыть видео">✕</button></div><div class="video-frame" id="videoFrame"></div><div class="video-foot"><span><i class="red-dot"></i> ОФИЦИАЛЬНЫЙ ТРЕЙЛЕР</span><span>Просмотр через YouTube · настройки качества и звука — в плеере</span></div><div class="video-actions"><button class="outline-btn" id="nextVideo">Следующий фильм ↗</button><a id="youtubeLink" href="#" target="_blank" rel="noopener noreferrer" class="video-link">Смотреть на YouTube ↗</a></div></dialog>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script src="/app.js" defer></script>
+  <script src="/app.js?v=kinoclub-nav-ticker-3" defer></script>
 </body>
 </html>
