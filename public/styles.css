@@ -600,29 +600,21 @@ body { font-family:var(--font); font-feature-settings:'ss01' on; -webkit-font-sm
 @media(max-width:520px){.screen-card .screen-number{left:6px;}}
 
 
-/* V9: right-align only Legally Blonde and Ted Lasso, clear of the arrow control. */
+/* V10: Legally Blonde and Ted Lasso on the same bottom baseline as left-side titles, clear of the arrow. */
 .screen-two .screen-text,
 .screen-four .screen-text{
   left:auto;
-  right:16px;
-  bottom:61px;
-  max-width:calc(100% - 32px);
+  right:56px;
+  bottom:17px;
+  max-width:calc(100% - 70px);
   align-items:flex-end;
   text-align:right;
 }
 @media(max-width:850px){
   .screen-two .screen-text,
   .screen-four .screen-text{
-    right:11px;
-    bottom:44px;
-    max-width:calc(100% - 22px);
-  }
-}
-@media(max-width:520px){
-  .screen-two .screen-text,
-  .screen-four .screen-text{
-    right:9px;
-    bottom:42px;
-    max-width:calc(100% - 18px);
+    right:39px;
+    bottom:10px;
+    max-width:calc(100% - 49px);
   }
 }
