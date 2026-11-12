@@ -1,6 +1,6 @@
 'use strict';
 const MOVIES = [
-  {id:'sheldon',title:'Детство Шелдона',english:'YOUNG SHELDON',type:'series',label:'СЕРИАЛ',year:'2017–2024',focus:'ПОВСЕДНЕВНАЯ РЕЧЬ',youtube:'XR-jIhwIfIw',by:'CBS / официальный трейлер',theme:'fallback-sheldon',short:'YOUNG SHELDON'},
+  {id:'sheldon',title:'Детство Шелдона',english:'YOUNG SHELDON',type:'series',label:'СЕРИАЛ',year:'2017–2024',focus:'ПОВСЕДНЕВНАЯ РЕЧЬ',youtube:'9AVt5oyzMbw',by:'Warner Channel / трейлер',theme:'fallback-sheldon',short:'YOUNG SHELDON'},
   {id:'blonde',title:'Блондинка в законе',english:'LEGALLY BLONDE',type:'movie',label:'ФИЛЬМ',year:'2001',focus:'БЫСТРЫЕ ФРАЗЫ',youtube:'vWOHwI_FgAo',by:'MGM Studios / официальный трейлер',theme:'fallback-blonde',short:'LEGALLY BLONDE'},
   {id:'proposal',title:'Предложение',english:'THE PROPOSAL',type:'movie',label:'ФИЛЬМ',year:'2009',focus:'ЖИВЫЕ ДИАЛОГИ',youtube:'jHraHCjK094',by:'Movieclips / официальный трейлер',theme:'fallback-proposal',short:'THE PROPOSAL'},
   {id:'ted',title:'Тед Лассо',english:'TED LASSO',type:'series',label:'СЕРИАЛ',year:'2020–2026',focus:'BRITISH & AMERICAN ENGLISH',youtube:'GACU1N9hg5o',by:'Apple TV / официальный трейлер',theme:'fallback-ted',short:'TED LASSO'}
@@ -54,19 +54,25 @@ function initIntro(){
   update(16);
   const logoReady=logo?.decode?logo.decode():Promise.resolve();
   const fontsReady=document.fonts?.ready||Promise.resolve();
-  const readyLogo=limitWait(logoReady,2000).then(()=>update(56));
-  const readyFonts=limitWait(fontsReady,1800).then(()=>update(83));
-  const readyLayout=new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))).then(()=>update(93));
+  let progressDone=false;
+  const progressTimer=setInterval(()=>{
+    if(progressDone || !intro.isConnected){clearInterval(progressTimer);return;}
+    const elapsed=performance.now()-started;
+    update(Math.min(94,Math.max(current,16+78*(elapsed/3500))));
+  },90);
+  const readyLogo=limitWait(logoReady,2000);
+  const readyFonts=limitWait(fontsReady,1800);
+  const readyLayout=new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
   Promise.all([readyLogo,readyFonts,readyLayout]).then(()=>{
-    const minimum=reduced?0:1150;
+    const minimum=reduced?160:3500;
     const remaining=Math.max(0,minimum-(performance.now()-started));
     setTimeout(()=>{
-      update(100);
+      progressDone=true;clearInterval(progressTimer);update(100);
       setTimeout(closeIntro,reduced?0:360);
     },remaining);
   });
   // Даже при сетевой ошибке главная страница останется доступна.
-  setTimeout(()=>{update(100);closeIntro()},4500);
+  setTimeout(()=>{progressDone=true;clearInterval(progressTimer);update(100);closeIntro()},6500);
 }
 function onCardKey(e){const card=e.target.closest('[data-id]');if(card && (e.key==='Enter'||e.key===' ')){e.preventDefault();openMovie(card.dataset.id)}}
 function onNavigate(key){if(key==='collection'||key==='method'){closeMenu();document.getElementById(key)?.scrollIntoView({behavior:'smooth'})}else if(key==='auth')showAuth();else if(key==='settings')openDialog('settings');else if(key==='feedback')openDialog('feedback')}
@@ -75,16 +81,60 @@ async function handleSaveSettings(){const next={audioLanguage:$('#audioSetting')
 async function handleFeedback(e){e.preventDefault();const form=e.currentTarget;const out=$('#feedbackStatus');out.classList.remove('success');out.textContent='';const btn=form.querySelector('button[type=submit]');btn.disabled=true;try{await api('feedback',{method:'POST',body:JSON.stringify({email:form.email.value.trim(),message:form.message.value.trim()})});out.textContent='Сообщение получено. Спасибо!';out.classList.add('success');form.reset()}catch(err){out.textContent=err.message}finally{btn.disabled=false}}
 async function logout(){try{await api('logout',{method:'POST',body:'{}'});model.me=null;model.settings={...defaults,...readLocalSettings()};renderAuth();applySettings();closeDialog('settings');toast('Вы вышли из аккаунта')}catch(err){toast(err.message)}}
 let heroPreviewsOn=false;
-function startHeroPreviews(force=false){
-  // Four unique, copyright-respecting official trailer embeds.
-  // This uses YouTube's own player and never copies video media.
+// Keep the branded poster visible until the video host confirms actual playback.
+// In restricted regions, blocked embeds never replace a film card with an error page.
+window.addEventListener('message',event=>{
+  if(!['https://www.youtube-nocookie.com','https://www.youtube.com'].includes(event.origin))return;
+  let msg=event.data;
+  if(typeof msg==='string'){try{msg=JSON.parse(msg)}catch{return}}
+  if(!msg||typeof msg!=='object')return;
+  const card=$$('.screen-card').find(el=>el.querySelector('iframe.preview-motion')?.contentWindow===event.source);
+  if(!card)return;
+  if(msg.event==='onReady'){
+    event.source.postMessage(JSON.stringify({event:'command',func:'mute',args:[]}),event.origin);
+    event.source.postMessage(JSON.stringify({event:'command',func:'playVideo',args:[]}),event.origin);
+  }
+  if(msg.event==='onStateChange' && msg.info===1)card.classList.add('video-playing');
+  if(msg.event==='onError')card.classList.remove('video-playing');
+});
+function startHeroPreviews(){
   if(heroPreviewsOn)return;
-  if(!force&&(model.settings.reducedMotion||matchMedia('(prefers-reduced-motion:reduce)').matches||!matchMedia('(min-width: 850px)').matches||navigator.connection?.saveData))return;
-  heroPreviewsOn=true;$('#playPreviews').textContent='■ ОСТАНОВИТЬ ЭКРАНЫ';
-  $$('.screen-card').forEach(card=>{const movie=MOVIES.find(m=>m.id===card.dataset.id);if(!movie)return;const frame=document.createElement('iframe');frame.className='preview-motion';frame.tabIndex=-1;frame.title='Беззвучное превью: '+movie.title;frame.loading='lazy';frame.allow='autoplay; encrypted-media; picture-in-picture';frame.setAttribute('aria-hidden','true');frame.src=`https://www.youtube-nocookie.com/embed/${movie.youtube}?autoplay=1&mute=1&controls=0&rel=0&playsinline=1&loop=1&playlist=${movie.youtube}`;card.querySelector('.screen-image').append(frame)})
+  if(model.settings.reducedMotion||matchMedia('(prefers-reduced-motion:reduce)').matches||navigator.connection?.saveData)return;
+  heroPreviewsOn=true;
+  $$('.screen-card').forEach((card,index)=>{
+    const movie=MOVIES.find(m=>m.id===card.dataset.id);
+    if(!movie)return;
+    const frame=document.createElement('iframe');
+    frame.className='preview-motion';
+    frame.tabIndex=-1;
+    frame.title='Беззвучный видеофон: '+movie.title;
+    frame.loading='eager';
+    frame.allow='autoplay; encrypted-media; picture-in-picture';
+    frame.referrerPolicy='strict-origin-when-cross-origin';
+    frame.setAttribute('aria-hidden','true');
+    const origin=encodeURIComponent(location.origin);
+    frame.src=`https://www.youtube-nocookie.com/embed/${movie.youtube}?autoplay=1&mute=1&controls=0&playsinline=1&loop=1&playlist=${movie.youtube}&disablekb=1&fs=0&iv_load_policy=3&rel=0&modestbranding=1&enablejsapi=1&origin=${origin}`;
+    frame.addEventListener('load',()=>{
+      const listen=()=>frame.contentWindow?.postMessage(JSON.stringify({event:'listening',id:movie.id}),'https://www.youtube-nocookie.com');
+      listen();setTimeout(listen,500);
+    });
+    const holder=card.querySelector('.screen-image');
+    holder.append(frame);
+    card.classList.add('has-video');
+  });
 }
-function toggleHeroPreviews(){if(!heroPreviewsOn){startHeroPreviews(true);return;}heroPreviewsOn=false;$$('.preview-motion').forEach(frame=>frame.remove());$('#playPreviews').textContent='▶ ЖИВЫЕ ЭКРАНЫ';}
+function observeHeroPreviews(){
+  const scene=$('#screenScene');
+  if(!('IntersectionObserver' in window)){startHeroPreviews();return;}
+  const observer=new IntersectionObserver(entries=>{
+    if(entries.some(e=>e.isIntersecting)){
+      observer.disconnect();
+      startHeroPreviews();
+    }
+  },{threshold:.08});
+  observer.observe(scene);
+}
 function attach(){initIntro();$('#menuToggle').onclick=()=>model.menuOpen?closeMenu():openMenu();$('#scrim').onclick=closeMenu;$$('[data-close=menu]').forEach(b=>b.onclick=closeMenu);$$('[data-nav]').forEach(b=>b.onclick=()=>onNavigate(b.dataset.nav));$$('dialog').forEach(d=>d.addEventListener('click',e=>{if(e.target===d)d.close()}));$$('[data-close]').filter(b=>b.dataset.close!=='menu').forEach(b=>b.onclick=()=>closeDialog(b.dataset.close));$('#videoDialog').addEventListener('close',()=>$('#videoFrame').replaceChildren());$('#loginTop').onclick=showAuth;$('#joinButton').onclick=()=>{if(model.me){openDialog('settings')}else{setAuthMode('register');openDialog('auth')}};$('#showHow').onclick=()=>$('#method').scrollIntoView({behavior:'smooth'});$('#footerFeedback').onclick=()=>openDialog('feedback');$('#tabLogin').onclick=()=>setAuthMode('login');$('#tabRegister').onclick=()=>setAuthMode('register');$('#authForm').onsubmit=handleAuth;$('#saveSettings').onclick=handleSaveSettings;$('#logoutButton').onclick=logout;$('#feedbackForm').onsubmit=handleFeedback;$('#nextVideo').onclick=()=>openMovie(MOVIES[(model.currentMovie+1)%MOVIES.length].id);$$('.filter').forEach(b=>b.onclick=()=>{$$('.filter').forEach(x=>x.classList.remove('active'));b.classList.add('active');model.filter=b.dataset.filter;renderCatalog()});$('#catalogSearch').oninput=renderCatalog;$('#catalogGrid').addEventListener('click',e=>{const card=e.target.closest('.movie-card');if(card)openMovie(card.dataset.id)});$('#catalogGrid').addEventListener('keydown',onCardKey);$$('.screen-card').forEach(c=>{c.onclick=()=>openMovie(c.dataset.id);c.onkeydown=onCardKey});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()});
   // Gentle cursor depth on desktop; automatically disabled for reduced motion.
-  $('#playPreviews').onclick=toggleHeroPreviews;const scene=$('#screenScene');scene.addEventListener('pointermove',e=>{if(matchMedia('(prefers-reduced-motion:reduce)').matches||model.settings.reducedMotion||!matchMedia('(min-width:850px)').matches)return;const box=scene.getBoundingClientRect();const x=(e.clientX-box.left)/box.width-.5,y=(e.clientY-box.top)/box.height-.5;$$('.screen-card').forEach((card,index)=>{card.style.translate=`${x*(index%2===0?-12:12)}px ${y*(index<2?-10:10)}px`})});scene.addEventListener('pointerleave',()=>$$('.screen-card').forEach(c=>c.style.translate='0px 0px'));}
-renderCatalog();monitorImages();attach();syncUser().then(()=>setTimeout(startHeroPreviews,3100));
+  const scene=$('#screenScene');scene.addEventListener('pointermove',e=>{if(matchMedia('(prefers-reduced-motion:reduce)').matches||model.settings.reducedMotion||!matchMedia('(min-width:850px)').matches)return;const box=scene.getBoundingClientRect();const x=(e.clientX-box.left)/box.width-.5,y=(e.clientY-box.top)/box.height-.5;$$('.screen-card').forEach((card,index)=>{card.style.translate=`${x*(index%2===0?-12:12)}px ${y*(index<2?-10:10)}px`})});scene.addEventListener('pointerleave',()=>$$('.screen-card').forEach(c=>c.style.translate='0px 0px'));}
+renderCatalog();monitorImages();attach();syncUser().then(()=>setTimeout(observeHeroPreviews,3700));

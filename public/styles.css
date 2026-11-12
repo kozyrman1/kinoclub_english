@@ -166,3 +166,143 @@ body.intro-active { overflow: hidden; }
   .intro.is-finished { transition-duration: .01ms !important; }
   .intro-fill { transition-duration: .01ms !important; }
 }
+
+/* ===== KINOCLUB DESIGN REFINEMENT / 2026.11 ===== */
+:root {
+  --font: 'Onest', sans-serif;
+  --display: 'Unbounded', 'Onest', sans-serif;
+}
+body { font-family:var(--font); font-feature-settings:'ss01' on; -webkit-font-smoothing:antialiased; }
+.hero h1, .section-head h2, .method-section h2, .join-inner h2,
+.modal h2,.movie-card h3,.video-top h2,.footer-logo strong { font-family:var(--display); font-weight:800; }
+.hero h1 { font-size:clamp(54px,5.55vw,106px); line-height:1.11; letter-spacing:-.088em; }
+.hero h1 em { font-size:.85em; }
+.hero h1 .title-top { font-size:.67em; letter-spacing:-.085em; }
+.hero h1 .title-red { letter-spacing:-.09em; }
+.section-head h2,.method-section h2 {font-size:clamp(34px,4.45vw,69px);line-height:1.2;letter-spacing:-.075em;}
+.join-inner h2 {font-size:clamp(54px,8.3vw,116px);letter-spacing:-.08em;line-height:1.09;}
+.movie-card h3 {font-size:clamp(14px,1.5vw,20px);line-height:1.45;letter-spacing:-.065em;}
+.method-step b {font-family:var(--display);font-size:clamp(17px,1.7vw,24px);letter-spacing:-.045em;}
+.section-kicker,.eyebrow,.movie-meta,.footer-copy,.footer-logo small {letter-spacing:.12em;}
+.hero-copy>p,.section-head>p,.method-left>p,.method-step p {font-weight:450;letter-spacing:-.012em;}
+/* Header identity: transparent popcorn art; white "Кино", original scarlet "Клуб". */
+.header {padding-left:3.9vw;padding-right:3.9vw;}
+.brand { gap:15px;min-width:190px;}
+.brand img { width:142px;height:85px;object-fit:contain;filter:drop-shadow(0 6px 13px rgba(0,0,0,.18));}
+.brand-sub {font-family:var(--font);font-size:8px;line-height:1.5;letter-spacing:.11em;color:#ead4d7;}
+.header-actions {gap:15px;}
+.login-cta {
+  background:linear-gradient(126deg,#ff3357,#ec153f);
+  border:1px solid rgba(255,255,255,.28);
+  border-radius:999px;
+  padding:14px 20px;
+  box-shadow:0 8px 24px rgba(253,36,72,.25),inset 0 1px 0 rgba(255,255,255,.25);
+  color:#fff;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.03em;
+  transition:transform .25s,box-shadow .25s,background .25s;
+}
+.login-cta:hover {transform:translateY(-2px);box-shadow:0 13px 29px rgba(253,36,72,.44);background:#ff3659;}
+.login-cta span {margin-left:15px;font-size:15px;}
+/* Film screens: polished deep-metal frames, clear moving images, no poster above player. */
+.screen-card {
+  overflow:visible;
+  border:1px solid #f4d0d84a;
+  border-radius:14px;
+  background:#301b2b;
+  box-shadow:0 22px 58px #030006cd,0 0 0 5px #24131f,0 0 0 6px #fdd6e72d,
+    inset 0 1px 0 rgba(255,255,255,.4);
+  isolation:isolate;
+}
+.screen-card::before {
+  content:'';
+  position:absolute;
+  inset:-5px;
+  border:1px solid rgba(255,235,244,.12);
+  border-radius:17px;
+  z-index:12;
+  pointer-events:none;
+}
+.screen-card:hover {border-color:#ffc6d6;box-shadow:0 35px 82px #000e,0 0 0 5px #5b293c,0 0 0 6px #ffb4c35a,0 0 28px #fd24482e;}
+.screen-image {inset:4px;border-radius:9px;overflow:hidden;background:#170d16;}
+.screen-image img {filter:brightness(.91) saturate(1.04);}
+.screen-image::after {background:linear-gradient(180deg,rgba(6,1,9,.26),transparent 36%,transparent 60%,rgba(7,1,13,.51));z-index:4;pointer-events:none;}
+.screen-image iframe.preview-motion {
+  position:absolute;
+  z-index:3;
+  width:180%;
+  height:180%;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  border:0;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .55s ease;
+  filter:saturate(1.04) contrast(1.04) brightness(.92);
+}
+.screen-card.video-playing .screen-image img {opacity:0;}
+.screen-card.video-playing .screen-image iframe.preview-motion {opacity:1;}
+.screen-number {font-weight:800;text-shadow:0 1px 7px #000a;}
+.screen-text b {font-family:var(--display);font-size:clamp(12px,1.45vw,21px);font-weight:750;letter-spacing:-.06em;line-height:1.17;text-shadow:0 2px 10px #0008;}
+.screen-text>span {font-weight:700;}
+.screen-play {border:1px solid #ffffff9b;background:rgba(23,5,22,.65);backdrop-filter:blur(8px);}
+/* Seamless kinetic movie ticker with custom black/white clapboard icon. */
+.marquee {background:linear-gradient(90deg,#fc244a,#ed183f);}
+.marquee-track {display:flex;align-items:center;width:max-content;white-space:nowrap;animation:kinoclub-ticker 23s linear infinite;gap:0;word-spacing:normal;letter-spacing:0;}
+.marquee-group {display:flex;align-items:center;flex-shrink:0;}
+.marquee-word {font-family:var(--display);font-weight:750;letter-spacing:-.075em;margin-left:28px;}
+.marquee-clap {display:inline-block;position:relative;margin:0 44px;width:.77em;height:.65em;flex-shrink:0;transform:rotate(-12deg);}
+.marquee-clap::before {content:'';position:absolute;left:2%;top:3%;width:95%;height:31%;background:repeating-linear-gradient(125deg,#1b0b19 0 9px,#fff5ed 9px 18px);border:2px solid #1b0b19;border-radius:3px;transform:rotate(-13deg);transform-origin:left bottom;}
+.marquee-clap::after {content:'';position:absolute;top:31%;left:2%;width:95%;height:57%;border:2px solid #1b0b19;background:linear-gradient(160deg,#16111b,#3a1b29);border-radius:2px 2px 5px 5px;box-shadow:inset 0 0 0 2px #fff4ef;}
+@keyframes kinoclub-ticker {to {transform:translateX(-50%);}}
+/* Elegant footer credit to development studio. */
+.footer {align-items:end;}
+.footer-copy {display:flex;flex-direction:column;align-items:flex-end;gap:20px;text-align:right;}
+.studio-credit {display:flex;align-items:baseline;gap:9px;color:#bfa1b0;font-size:9px;letter-spacing:.08em;white-space:nowrap;transition:color .2s;}
+.studio-credit strong {font-family:var(--display);font-size:12px;color:#fff5f0;letter-spacing:-.045em;font-weight:800;}
+.studio-credit strong em {color:#ff4969;font-style:normal;}
+.studio-credit strong span {font-family:var(--font);font-size:13px;font-weight:700;margin-left:4px;}
+.studio-credit:hover,.studio-credit:hover strong {color:#ff9cac;}
+@media (max-width:1180px){
+ .hero h1{font-size:clamp(52px,6vw,92px)}
+ .screen-text b{font-size:clamp(11px,1.35vw,17px)}
+}
+@media (max-width:850px){
+ .header {padding:10px 3vw;}
+ .brand img {width:128px;height:75px;}
+ .login-cta {padding:13px 18px;}
+ .hero h1 {font-size:clamp(48px,10.3vw,83px);}
+ .screen-card{border-width:1px;}
+ .screen-text b{font-size:clamp(10px,2.15vw,16px);}
+ .section-head h2,.method-section h2{font-size:clamp(35px,7vw,64px)}
+ .join-inner h2{font-size:clamp(48px,10vw,86px)}
+}
+@media (max-width:520px){
+ .header {height:83px;padding:9px 17px;}
+ .brand {min-width:0;gap:8px;}
+ .brand img {width:101px;height:66px;}
+ .brand-sub {font-size:6px;max-width:67px;}
+ .header-actions {gap:9px;}
+ .login-cta {padding:11px 13px;font-size:11px;}
+ .login-cta span {margin-left:7px;}
+ .dots-button{width:41px;height:41px;}
+ .hero h1{font-size:clamp(42px,10vw,70px);line-height:1.14;letter-spacing:-.085em;}
+ .hero h1 .title-top{font-size:.74em;}
+ .screen-text b{font-size:clamp(9px,2.2vw,12px);line-height:1.21;}
+ .screen-text{left:10px;bottom:10px;}
+ .screen-number{top:9px;left:10px;font-size:7px;}
+ .screen-card {border-radius:10px;box-shadow:0 13px 30px #000b,0 0 0 3px #24131f,0 0 0 4px #ffd2e84d;}
+ .screen-card::before{inset:-3px;border-radius:12px;}
+ .screen-image{inset:3px;border-radius:7px;}
+ .marquee {height:76px;}
+ .marquee-track {font-size:30px;}
+ .marquee-word {margin-left:12px;}
+ .marquee-clap {margin:0 22px;}
+ .section-head h2,.method-section h2{font-size:clamp(32px,8.1vw,49px);line-height:1.25;}
+ .join-inner h2{font-size:clamp(41px,9.4vw,64px);}
+ .footer {align-items:flex-start;}
+ .footer-copy {width:100%;text-align:left;align-items:flex-start;gap:12px;}
+ .studio-credit strong{font-size:11px;}
+}
