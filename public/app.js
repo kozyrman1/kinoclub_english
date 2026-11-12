@@ -25,7 +25,49 @@ function closeDialog(id){const el=$('#'+id+'Dialog');if(el?.open)el.close();if(i
 function setAuthMode(mode){model.authMode=mode;const isRegister=mode==='register';$('#tabLogin').classList.toggle('active',!isRegister);$('#tabRegister').classList.toggle('active',isRegister);$('#authHeading').innerHTML=isRegister?'ВАШ ПЕРВЫЙ КАДР<span>!</span>':'С ВОЗВРАЩЕНИЕМ<span>!</span>';$('#authSubmitLabel').textContent=isRegister?'Создать аккаунт':'Войти';$('#authForm [name=password]').autocomplete=isRegister?'new-password':'current-password';$('#authError').textContent='';}
 function showAuth(){if(model.me){openDialog('settings')}else{setAuthMode('login');openDialog('auth')}}
 function openMovie(id){const ix=MOVIES.findIndex(m=>m.id===id);if(ix<0)return;model.currentMovie=ix;const m=MOVIES[ix];$('#videoName').textContent=m.title;$('#videoEyebrow').textContent=m.english+' / '+m.by.toUpperCase();$('#youtubeLink').href='https://www.youtube.com/watch?v='+m.youtube;const frame=$('#videoFrame');frame.replaceChildren();const iframe=document.createElement('iframe');iframe.title='Трейлер: '+m.title;iframe.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';iframe.referrerPolicy='strict-origin-when-cross-origin';iframe.allowFullscreen=true;iframe.src=`https://www.youtube-nocookie.com/embed/${m.youtube}?autoplay=1&rel=0&playsinline=1`;frame.append(iframe);openDialog('video');}
-function closeIntro(){const intro=$('#intro');intro.classList.add('skipped');intro.style.animation='none';intro.style.transform='translateY(-110%)';intro.style.pointerEvents='none';$$('.screen-card').forEach(c=>{c.style.animationDelay='0s'});}
+function closeIntro(){
+  const intro=$('#intro');
+  if(!intro || intro.classList.contains('is-finished'))return;
+  intro.classList.add('is-finished');
+  document.body.classList.remove('intro-active');
+  // Удаляем заставку только после плавного перехода, чтобы не было вспышки.
+  setTimeout(()=>intro.remove(),700);
+}
+function initIntro(){
+  const intro=$('#intro');
+  if(!intro)return;
+  const fill=$('#introFill'),track=$('#introTrack'),logo=$('#introLogo');
+  const started=performance.now();
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.body.classList.add('intro-active');
+  let current=0;
+  const update=(value)=>{
+    if(!intro.isConnected)return;
+    current=Math.max(current,Math.min(100,value));
+    fill.style.transform=`scaleX(${current/100})`;
+    track.setAttribute('aria-valuenow',String(Math.round(current)));
+  };
+  const limitWait=(promise,ms)=>Promise.race([
+    Promise.resolve(promise).catch(()=>{}),
+    new Promise(resolve=>setTimeout(resolve,ms))
+  ]);
+  update(16);
+  const logoReady=logo?.decode?logo.decode():Promise.resolve();
+  const fontsReady=document.fonts?.ready||Promise.resolve();
+  const readyLogo=limitWait(logoReady,2000).then(()=>update(56));
+  const readyFonts=limitWait(fontsReady,1800).then(()=>update(83));
+  const readyLayout=new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))).then(()=>update(93));
+  Promise.all([readyLogo,readyFonts,readyLayout]).then(()=>{
+    const minimum=reduced?0:1150;
+    const remaining=Math.max(0,minimum-(performance.now()-started));
+    setTimeout(()=>{
+      update(100);
+      setTimeout(closeIntro,reduced?0:360);
+    },remaining);
+  });
+  // Даже при сетевой ошибке главная страница останется доступна.
+  setTimeout(()=>{update(100);closeIntro()},4500);
+}
 function onCardKey(e){const card=e.target.closest('[data-id]');if(card && (e.key==='Enter'||e.key===' ')){e.preventDefault();openMovie(card.dataset.id)}}
 function onNavigate(key){if(key==='collection'||key==='method'){closeMenu();document.getElementById(key)?.scrollIntoView({behavior:'smooth'})}else if(key==='auth')showAuth();else if(key==='settings')openDialog('settings');else if(key==='feedback')openDialog('feedback')}
 async function handleAuth(e){e.preventDefault();const form=e.currentTarget;const btn=form.querySelector('button[type=submit]');const email=form.email.value.trim();const password=form.password.value;const output=$('#authError');output.classList.remove('success');output.textContent='';btn.disabled=true;try{const result=await api(model.authMode==='register'?'register':'login',{method:'POST',body:JSON.stringify({email,password})});model.me=result.user;model.settings={...defaults,...result.user.settings};renderAuth();applySettings();form.reset();closeDialog('auth');toast(model.authMode==='register'?'Аккаунт создан. Добро пожаловать!':'Вы вошли в КиноКлуб!')}catch(err){output.textContent=err.message}finally{btn.disabled=false}}
@@ -42,7 +84,7 @@ function startHeroPreviews(force=false){
   $$('.screen-card').forEach(card=>{const movie=MOVIES.find(m=>m.id===card.dataset.id);if(!movie)return;const frame=document.createElement('iframe');frame.className='preview-motion';frame.tabIndex=-1;frame.title='Беззвучное превью: '+movie.title;frame.loading='lazy';frame.allow='autoplay; encrypted-media; picture-in-picture';frame.setAttribute('aria-hidden','true');frame.src=`https://www.youtube-nocookie.com/embed/${movie.youtube}?autoplay=1&mute=1&controls=0&rel=0&playsinline=1&loop=1&playlist=${movie.youtube}`;card.querySelector('.screen-image').append(frame)})
 }
 function toggleHeroPreviews(){if(!heroPreviewsOn){startHeroPreviews(true);return;}heroPreviewsOn=false;$$('.preview-motion').forEach(frame=>frame.remove());$('#playPreviews').textContent='▶ ЖИВЫЕ ЭКРАНЫ';}
-function attach(){const intro=$('#intro');$('#skipIntro').onclick=closeIntro;intro.addEventListener('animationend',e=>{if(e.animationName==='introOut')intro.remove()});if(sessionStorage.getItem('kinoclub_intro_seen'))closeIntro();else sessionStorage.setItem('kinoclub_intro_seen','1');if(matchMedia('(prefers-reduced-motion:reduce)').matches)closeIntro();$('#menuToggle').onclick=()=>model.menuOpen?closeMenu():openMenu();$('#scrim').onclick=closeMenu;$$('[data-close=menu]').forEach(b=>b.onclick=closeMenu);$$('[data-nav]').forEach(b=>b.onclick=()=>onNavigate(b.dataset.nav));$$('dialog').forEach(d=>d.addEventListener('click',e=>{if(e.target===d)d.close()}));$$('[data-close]').filter(b=>b.dataset.close!=='menu').forEach(b=>b.onclick=()=>closeDialog(b.dataset.close));$('#videoDialog').addEventListener('close',()=>$('#videoFrame').replaceChildren());$('#loginTop').onclick=showAuth;$('#joinButton').onclick=()=>{if(model.me){openDialog('settings')}else{setAuthMode('register');openDialog('auth')}};$('#showHow').onclick=()=>$('#method').scrollIntoView({behavior:'smooth'});$('#footerFeedback').onclick=()=>openDialog('feedback');$('#tabLogin').onclick=()=>setAuthMode('login');$('#tabRegister').onclick=()=>setAuthMode('register');$('#authForm').onsubmit=handleAuth;$('#saveSettings').onclick=handleSaveSettings;$('#logoutButton').onclick=logout;$('#feedbackForm').onsubmit=handleFeedback;$('#nextVideo').onclick=()=>openMovie(MOVIES[(model.currentMovie+1)%MOVIES.length].id);$$('.filter').forEach(b=>b.onclick=()=>{$$('.filter').forEach(x=>x.classList.remove('active'));b.classList.add('active');model.filter=b.dataset.filter;renderCatalog()});$('#catalogSearch').oninput=renderCatalog;$('#catalogGrid').addEventListener('click',e=>{const card=e.target.closest('.movie-card');if(card)openMovie(card.dataset.id)});$('#catalogGrid').addEventListener('keydown',onCardKey);$$('.screen-card').forEach(c=>{c.onclick=()=>openMovie(c.dataset.id);c.onkeydown=onCardKey});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()});
+function attach(){initIntro();$('#menuToggle').onclick=()=>model.menuOpen?closeMenu():openMenu();$('#scrim').onclick=closeMenu;$$('[data-close=menu]').forEach(b=>b.onclick=closeMenu);$$('[data-nav]').forEach(b=>b.onclick=()=>onNavigate(b.dataset.nav));$$('dialog').forEach(d=>d.addEventListener('click',e=>{if(e.target===d)d.close()}));$$('[data-close]').filter(b=>b.dataset.close!=='menu').forEach(b=>b.onclick=()=>closeDialog(b.dataset.close));$('#videoDialog').addEventListener('close',()=>$('#videoFrame').replaceChildren());$('#loginTop').onclick=showAuth;$('#joinButton').onclick=()=>{if(model.me){openDialog('settings')}else{setAuthMode('register');openDialog('auth')}};$('#showHow').onclick=()=>$('#method').scrollIntoView({behavior:'smooth'});$('#footerFeedback').onclick=()=>openDialog('feedback');$('#tabLogin').onclick=()=>setAuthMode('login');$('#tabRegister').onclick=()=>setAuthMode('register');$('#authForm').onsubmit=handleAuth;$('#saveSettings').onclick=handleSaveSettings;$('#logoutButton').onclick=logout;$('#feedbackForm').onsubmit=handleFeedback;$('#nextVideo').onclick=()=>openMovie(MOVIES[(model.currentMovie+1)%MOVIES.length].id);$$('.filter').forEach(b=>b.onclick=()=>{$$('.filter').forEach(x=>x.classList.remove('active'));b.classList.add('active');model.filter=b.dataset.filter;renderCatalog()});$('#catalogSearch').oninput=renderCatalog;$('#catalogGrid').addEventListener('click',e=>{const card=e.target.closest('.movie-card');if(card)openMovie(card.dataset.id)});$('#catalogGrid').addEventListener('keydown',onCardKey);$$('.screen-card').forEach(c=>{c.onclick=()=>openMovie(c.dataset.id);c.onkeydown=onCardKey});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()});
   // Gentle cursor depth on desktop; automatically disabled for reduced motion.
   $('#playPreviews').onclick=toggleHeroPreviews;const scene=$('#screenScene');scene.addEventListener('pointermove',e=>{if(matchMedia('(prefers-reduced-motion:reduce)').matches||model.settings.reducedMotion||!matchMedia('(min-width:850px)').matches)return;const box=scene.getBoundingClientRect();const x=(e.clientX-box.left)/box.width-.5,y=(e.clientY-box.top)/box.height-.5;$$('.screen-card').forEach((card,index)=>{card.style.translate=`${x*(index%2===0?-12:12)}px ${y*(index<2?-10:10)}px`})});scene.addEventListener('pointerleave',()=>$$('.screen-card').forEach(c=>c.style.translate='0px 0px'));}
 renderCatalog();monitorImages();attach();syncUser().then(()=>setTimeout(startHeroPreviews,3100));

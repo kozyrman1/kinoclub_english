@@ -16,10 +16,24 @@
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
-  <div id="intro" class="intro" aria-hidden="true">
-    <div class="intro-orbit orbit-one"></div><div class="intro-orbit orbit-two"></div>
-    <div class="intro-stage"><span class="intro-small">NOW SHOWING</span><div class="intro-title"><span>КИНО</span><span>КЛУБ<span class="intro-star">✳</span></span></div><div class="intro-progress"><span></span></div><span class="intro-caption">АНГЛИЙСКИЙ В ГЛАВНОЙ РОЛИ</span></div>
-    <button id="skipIntro" class="skip-intro">Пропустить <span>↗</span></button>
+  <!-- Заставка: оригинальный логотип и настоящая индикация готовности интерфейса. -->
+  <div id="intro" class="intro" role="status" aria-label="Загружается КиноКлуб">
+    <div class="intro-center">
+      <div class="intro-clapper" aria-hidden="true">
+        <div class="clapper-top"></div>
+        <div class="clapper-hinge"></div>
+        <div class="clapper-base"><span class="clapper-play"></span></div>
+      </div>
+      <img id="introLogo" class="intro-logo" src="/assets/kinoclub-logo.png"
+           alt="КиноКлуб — попкорн, кинопленка и английский язык" fetchpriority="high" decoding="async" />
+    </div>
+    <div class="intro-loader">
+      <div class="intro-loader-label">ЗАГРУЗКА</div>
+      <div id="introTrack" class="intro-track" role="progressbar"
+           aria-label="Загрузка сайта" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <span id="introFill" class="intro-fill"></span>
+      </div>
+    </div>
   </div>
 
   <header class="header" id="top">

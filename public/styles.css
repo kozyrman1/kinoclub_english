@@ -6,3 +6,163 @@
 @media (max-width:520px){.hero h1 .title-top{font-size:.84em}}
 
 html{overflow-x:hidden}.screen-image img,.movie-art img{opacity:0;transition:opacity .45s ease,transform .55s,filter .55s}.screen-image img.loaded,.movie-art img.loaded{opacity:1}.scene-live-toggle{position:absolute;bottom:0;right:4%;z-index:15;border:1px solid #cb8d9e;background:#20111dbe;backdrop-filter:blur(8px);color:#f8d4da;padding:12px 16px;font-size:9px;letter-spacing:.1em;font-weight:800;border-radius:25px;transition:background .2s}.scene-live-toggle:hover{background:var(--hot)}@media (max-width:850px){.scene-live-toggle{right:4%;bottom:0;font-size:8px;padding:10px 12px}}
+
+
+/* ---------- Кинозаставка с фирменным логотипом ---------- */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse 80% 66% at 50% 44%, #fff 5%, #faf7f6 58%, #f2e9e9 100%);
+  color: #2b1829;
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  animation: none;
+  transition: opacity .55s ease, visibility .55s ease;
+  isolation: isolate;
+}
+.intro::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 10%, rgba(248,36,69,.035) 45%, transparent 80%);
+  pointer-events: none;
+}
+.intro.is-finished { opacity: 0; visibility: hidden; pointer-events: none; }
+body.intro-active { overflow: hidden; }
+.intro-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(76vw, 710px);
+  gap: clamp(16px, 3.4vh, 34px);
+  transform: translateY(-4vh);
+  animation: premiereEnter .8s cubic-bezier(.2,.8,.2,1) both;
+}
+.intro-logo {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 49vh;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 28px rgba(78,28,49,.09));
+}
+/* Классическая монохромная кинохлопушка, анимированная без видеоконтента. */
+.intro-clapper {
+  position: relative;
+  width: 112px;
+  height: 105px;
+  transform: rotate(-7deg);
+  filter: drop-shadow(0 9px 12px rgba(32,18,27,.13));
+}
+.clapper-base {
+  position: absolute;
+  left: 8px;
+  top: 36px;
+  width: 101px;
+  height: 61px;
+  border: 3px solid #242026;
+  border-radius: 4px 4px 8px 8px;
+  background: #242026;
+}
+.clapper-base::before {
+  content: '';
+  position: absolute;
+  inset: 7px;
+  border: 1px solid rgba(255,255,255,.34);
+  border-radius: 2px;
+}
+.clapper-play {
+  position: absolute;
+  top: 18px;
+  left: 41px;
+  width: 0;
+  height: 0;
+  border-top: 11px solid transparent;
+  border-bottom: 11px solid transparent;
+  border-left: 16px solid #fff;
+}
+.clapper-top {
+  position: absolute;
+  z-index: 2;
+  left: 6px;
+  top: 16px;
+  width: 104px;
+  height: 24px;
+  border: 3px solid #242026;
+  border-radius: 5px;
+  background: repeating-linear-gradient(130deg, #fff 0 15px, #242026 15px 30px);
+  transform-origin: 8px 88%;
+  animation: clapperClick 1.9s cubic-bezier(.55,.05,.2,1) infinite;
+}
+.clapper-hinge {
+  position: absolute;
+  z-index: 3;
+  left: 11px;
+  top: 32px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #242026;
+}
+.intro-loader {
+  position: absolute;
+  bottom: clamp(32px, 7.5vh, 88px);
+  left: 50%;
+  width: min(420px, 72vw);
+  transform: translateX(-50%);
+}
+.intro-loader-label {
+  color: #4d3546;
+  text-align: center;
+  letter-spacing: .33em;
+  padding-left: .33em;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.5;
+  margin-bottom: 17px;
+}
+.intro-track {
+  position: relative;
+  width: 100%;
+  height: 3px;
+  border-radius: 10px;
+  background: rgba(64,34,53,.14);
+  overflow: hidden;
+}
+.intro-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #ea2045, #ff6272);
+  border-radius: inherit;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform .45s cubic-bezier(.2,.65,.25,1);
+}
+@keyframes clapperClick {
+  0%, 14%, 65%, 100% { transform: rotate(-28deg); }
+  26%, 42% { transform: rotate(0deg); }
+}
+@keyframes premiereEnter {
+  from { opacity: 0; transform: translateY(calc(-4vh + 25px)) scale(.97); }
+  to { opacity: 1; transform: translateY(-4vh) scale(1); }
+}
+@media (max-width: 600px) {
+  .intro-center { width: min(90vw, 480px); gap: 16px; transform: translateY(-5vh); }
+  .intro-logo { max-height: 43vh; }
+  .intro-clapper { transform: rotate(-7deg) scale(.85); margin-bottom: -10px; }
+  .intro-loader { bottom: max(54px, env(safe-area-inset-bottom, 0px) + 36px); width: min(78vw, 340px); }
+  .intro-loader-label { font-size: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro { display: flex; }
+  .intro-center, .clapper-top { animation: none !important; }
+  .intro.is-finished { transition-duration: .01ms !important; }
+  .intro-fill { transition-duration: .01ms !important; }
+}
