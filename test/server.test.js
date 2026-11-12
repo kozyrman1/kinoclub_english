@@ -1,0 +1,35 @@
+'use strict';
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const {spawn} = require('node:child_process');
+const fs = require('node:fs');
+const path = require('node:path');
+const os = require('node:os');
+const net = require('node:net');
+const root = path.join(__dirname, '..');
+const freePort=()=>new Promise((resolve,reject)=>{const s=net.createServer();s.once('error',reject);s.listen(0,'127.0.0.1',()=>{const port=s.address().port;s.close(()=>resolve(port))})});
+const sleep=t=>new Promise(r=>setTimeout(r,t));
+test('auth, settings and feedback API work end to end', async t=>{
+  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'kinoclub-test-'));
+  const port=await freePort();
+  const child=spawn(process.execPath,['server.js'],{cwd:root,env:{...process.env,PORT:String(port),DATA_DIR:dir},stdio:'ignore'});
+  t.after(()=>{child.kill();fs.rmSync(dir,{recursive:true,force:true})});
+  const base=`http://127.0.0.1:${port}`;
+  let started=false;
+  for(let i=0;i<60;i++){try{const r=await fetch(base+'/api/health');if(r.ok){started=true;break}}catch{}await sleep(80)}
+  assert.ok(started,'server starts');
+  const home=await fetch(base+'/');assert.equal(home.status,200);assert.match(await home.text(),/КиноКлуб/);
+  const credentials={email:'test@example.org',password:'Secret!Test2026'};
+  const register=await fetch(base+'/api/register',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(credentials)});
+  assert.equal(register.status,201);const cookie=register.headers.get('set-cookie');assert.match(cookie,/HttpOnly/);
+  const req=(pathname,data)=>fetch(base+'/api/'+pathname,{method:'POST',headers:{'content-type':'application/json','cookie':cookie},body:JSON.stringify(data)});
+  const me=await fetch(base+'/api/me',{headers:{cookie}});assert.equal((await me.json()).user.email,credentials.email);
+  const settings={audioLanguage:'ru',quality:'720p',subtitles:'en',reducedMotion:true};
+  assert.equal((await req('settings',settings)).status,200);
+  const after=await fetch(base+'/api/me',{headers:{cookie}});assert.deepEqual((await after.json()).user.settings,settings);
+  assert.equal((await req('feedback',{message:'Проверка работы формы'})).status,201);
+  const db=JSON.parse(fs.readFileSync(path.join(dir,'db.json'),'utf8'));
+  assert.equal(db.feedback.length,1);assert.notEqual(db.users[0].password,credentials.password);
+  assert.equal((await req('logout',{})).status,200);
+  const left=await fetch(base+'/api/me',{headers:{cookie}});assert.equal((await left.json()).user,null);
+});

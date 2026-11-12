@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#140b14" />
+  <meta name="description" content="КиноКлуб. Системный английский по фильмам и сериалам. Смотрите, слышьте, говорите." />
+  <meta property="og:title" content="КиноКлуб — английский как в кино" />
+  <meta property="og:description" content="Кино, живой английский и удовольствие от каждого занятия." />
+  <title>КиноКлуб — английский как в кино</title>
+  <link rel="icon" href="/assets/kinoclub-icon.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+  <div id="intro" class="intro" aria-hidden="true">
+    <div class="intro-orbit orbit-one"></div><div class="intro-orbit orbit-two"></div>
+    <div class="intro-stage"><span class="intro-small">NOW SHOWING</span><div class="intro-title"><span>КИНО</span><span>КЛУБ<span class="intro-star">✳</span></span></div><div class="intro-progress"><span></span></div><span class="intro-caption">АНГЛИЙСКИЙ В ГЛАВНОЙ РОЛИ</span></div>
+    <button id="skipIntro" class="skip-intro">Пропустить <span>↗</span></button>
+  </div>
+
+  <header class="header" id="top">
+    <a class="brand" href="#top" aria-label="КиноКлуб — на главную">
+      <img src="/assets/kinoclub-logo.png" alt="КиноКлуб — логотип с попкорном и символом EN" />
+      <span class="brand-sub">ПРОЕКТ ЛЮДМИЛЫ МАНДЕЛЬ</span>
+    </a>
+    <nav class="header-links" aria-label="Навигация">
+      <a href="#collection">Каталог</a><a href="#method">Как это работает</a>
+    </nav>
+    <div class="header-actions">
+      <span class="live-mark"><i></i> ENGLISH IN MOTION</span>
+      <button class="login-cta" id="loginTop">Войти <span>↗</span></button>
+      <button class="dots-button" id="menuToggle" aria-label="Открыть меню" aria-controls="menuPanel" aria-expanded="false"><i></i><i></i><i></i></button>
+    </div>
+  </header>
+
+  <aside id="menuPanel" class="menu-panel" aria-hidden="true">
+    <div class="menu-head"><span>НАВИГАЦИЯ / 01</span><button class="icon-button" data-close="menu" aria-label="Закрыть меню">✕</button></div>
+    <button data-nav="collection"><small>01</small><span>Каталог фильмов</span><b>↗</b></button>
+    <button data-nav="method"><small>02</small><span>О КиноКлубе</span><b>↗</b></button>
+    <button data-nav="settings"><small>03</small><span>Настройки</span><b>↗</b></button>
+    <button data-nav="feedback"><small>04</small><span>Обратная связь</span><b>↗</b></button>
+    <button data-nav="auth"><small>05</small><span id="accountMenuLabel">Вход / регистрация</span><b>↗</b></button>
+    <div class="menu-bottom"><span>НЕ ПРОСТО СМОТРЕТЬ. НАЧАТЬ ГОВОРИТЬ.</span><span>© КИНОКЛУБ 2026</span></div>
+  </aside>
+  <div id="scrim" class="scrim" hidden></div>
+
+  <main>
+    <section class="hero" aria-label="Главная">
+      <div class="hero-backdrop"><div class="light light-a"></div><div class="light light-b"></div></div>
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="dot"></span> FILM CLUB / ENGLISH EDITION <span class="line"></span> 001</div>
+        <h1><span class="title-top">АНГЛИЙСКИЙ</span><br/><em>КАК В</em><br/><span class="title-red">КИНО.</span></h1>
+        <p>Не зубрить правила. А слышать настоящую речь, понимать любимых героев и говорить увереннее.</p>
+        <div class="hero-buttons">
+          <a href="#collection" class="primary-btn">Смотреть каталог <span>↗</span></a>
+          <button id="showHow" class="text-btn"><span class="play-ring">▶</span> Как устроен клуб</button>
+        </div>
+        <div class="hero-count"><span class="count-num">04</span><span class="count-label">ИСТОРИИ.<br/>ТЫСЯЧИ ЖИВЫХ ФРАЗ.</span></div>
+      </div>
+      <div class="screen-scene" id="screenScene" aria-label="Четыре экрана с фильмами">
+        <span class="scene-label scene-label-top">YOUR ENGLISH. YOUR MOVIES.</span>
+        <div class="screen-card screen-one" data-id="sheldon" role="button" tabindex="0" aria-label="Открыть трейлер Детство Шелдона">
+          <div class="screen-image"><div class="screen-fallback fallback-sheldon"><span class="physics">E = mc²</span></div><img loading="eager" src="https://img.youtube.com/vi/XR-jIhwIfIw/hqdefault.jpg" alt="Кадр трейлера сериала Детство Шелдона" /></div>
+          <span class="screen-number">01 / SERIES</span><span class="screen-text"><b>ДЕТСТВО<br/>ШЕЛДОНА</b><span>YOUNG SHELDON</span></span><span class="screen-play">↗</span>
+        </div>
+        <div class="screen-card screen-two" data-id="blonde" role="button" tabindex="0" aria-label="Открыть трейлер Блондинка в законе">
+          <div class="screen-image"><div class="screen-fallback fallback-blonde"><span>ELLE<br/>WOODS</span></div><img loading="eager" src="https://img.youtube.com/vi/vWOHwI_FgAo/hqdefault.jpg" alt="Кадр официального трейлера Блондинка в законе" /></div>
+          <span class="screen-number">02 / MOVIE</span><span class="screen-text"><b>БЛОНДИНКА<br/>В ЗАКОНЕ</b><span>LEGALLY BLONDE</span></span><span class="screen-play">↗</span>
+        </div>
+        <div class="screen-card screen-three" data-id="proposal" role="button" tabindex="0" aria-label="Открыть трейлер Предложение">
+          <div class="screen-image"><div class="screen-fallback fallback-proposal"><span>THE<br/>PROPOSAL</span></div><img loading="eager" src="https://img.youtube.com/vi/jHraHCjK094/hqdefault.jpg" alt="Кадр официального трейлера Предложение" /></div>
+          <span class="screen-number">03 / MOVIE</span><span class="screen-text"><b>ПРЕДЛОЖЕНИЕ</b><span>THE PROPOSAL</span></span><span class="screen-play">↗</span>
+        </div>
+        <div class="screen-card screen-four" data-id="ted" role="button" tabindex="0" aria-label="Открыть трейлер Тед Лассо">
+          <div class="screen-image"><div class="screen-fallback fallback-ted"><span>BELIEVE.</span></div><img loading="eager" src="https://img.youtube.com/vi/GACU1N9hg5o/hqdefault.jpg" alt="Кадр официального трейлера Тед Лассо" /></div>
+          <span class="screen-number">04 / SERIES</span><span class="screen-text"><b>ТЕД ЛАССО</b><span>TED LASSO</span></span><span class="screen-play">↗</span>
+        </div>
+        <div class="scene-center-mark" aria-hidden="true"><span>THE</span><b>EN</b><span>CLUB</span></div>
+        <button id="playPreviews" class="scene-live-toggle" type="button" aria-label="Включить или выключить движущиеся трейлеры на экранах">▶ ЖИВЫЕ ЭКРАНЫ</button>
+      </div>
+      <div class="hero-bottom"><span>01 — 04 / CINE LANGUAGE</span><span>ЗВУЧИ КАК В КИНО <span>↘</span></span></div>
+    </section>
+
+    <div class="marquee" aria-hidden="true"><div class="marquee-track">WATCH IT <span>✳</span> HEAR IT <span>✳</span> SAY IT <span>✳</span> FEEL IT <span>✳</span> WATCH IT <span>✳</span> HEAR IT <span>✳</span> SAY IT <span>✳</span> FEEL IT <span>✳</span></div></div>
+
+    <section class="catalog section-wrap" id="collection">
+      <div class="section-head"><div><div class="section-kicker"><span class="red-dot"></span> КУРАТОРСКАЯ ПОДБОРКА / 001</div><h2>ВЫБИРАЙТЕ<br/><span>СВОЮ ИСТОРИЮ.</span></h2></div><p>Любимый фильм может стать вашим лучшим учебником. Начните с истории, которую хочется пересматривать.</p></div>
+      <div class="catalog-toolbar"><div class="filter-tabs" role="group" aria-label="Фильтр каталога"><button class="filter active" data-filter="all">Все <sup>04</sup></button><button class="filter" data-filter="movie">Фильмы <sup>02</sup></button><button class="filter" data-filter="series">Сериалы <sup>02</sup></button></div><label class="catalog-search"><span>⌕</span><input id="catalogSearch" placeholder="Найти фильм..." type="search" autocomplete="off" aria-label="Поиск фильма" /></label></div>
+      <div class="catalog-grid" id="catalogGrid"></div><p id="noResults" class="no-results" hidden>Ничего не найдено. Попробуйте другое название.</p>
+    </section>
+
+    <section id="method" class="method-section section-wrap"><div class="method-left"><div class="section-kicker">НЕ ПРОСТО КИНО / НАСТОЯЩИЙ АНГЛИЙСКИЙ</div><h2>СЛУШАЙТЕ.<br/>ПОВТОРЯЙТЕ.<br/><span>ГОВОРИТЕ.</span></h2><p>В центре занятий - живая речь героев. Разбираем, как слова соединяются в потоке, тренируем произношение и переносим фразы в собственную жизнь.</p><div class="signature">Проект Людмилы Мандель <span>✳</span></div></div><div class="method-right"><div class="method-step"><span>01</span><div><b>ПОНЯТЬ</b><p>Слушаем и замечаем детали речи, которые раньше ускользали.</p></div><span>↗</span></div><div class="method-step"><span>02</span><div><b>ПРОИЗНЕСТИ</b><p>Connected speech, редукции, интонация и shadowing.</p></div><span>↗</span></div><div class="method-step"><span>03</span><div><b>АКТИВИРОВАТЬ</b><p>Забираем полезные фразы из сцены в активный словарь.</p></div><span>↗</span></div><div class="method-step"><span>04</span><div><b>ГОВОРИТЬ</b><p>Обсуждаем близкие темы и начинаем говорить свободнее.</p></div><span>↗</span></div></div></section>
+
+    <section class="join-section section-wrap"><div class="join-inner"><span class="section-kicker">THE NEXT SCENE IS YOURS.</span><h2>ПОРА ВЫЙТИ<br/><em>В КАДР.</em></h2><p>Создайте аккаунт, выберите свою историю и начните путешествие в английский.</p><button class="light-btn" id="joinButton">Присоединиться <span>↗</span></button><div class="join-stamp">ENGLISH<br/>IS A<br/>MOVIE ✳</div></div></section>
+  </main>
+
+  <footer class="footer"><div class="footer-logo"><strong>КИНО<span>КЛУБ.</span></strong><small>ПРОЕКТ ЛЮДМИЛЫ МАНДЕЛЬ</small></div><div class="footer-links"><a href="#collection">Каталог</a><a href="#method">О проекте</a><button id="footerFeedback">Обратная связь</button></div><div class="footer-copy">© 2026 КИНОКЛУБ<br/>СОЗДАНО С ЛЮБОВЬЮ К КИНО И ЯЗЫКУ.</div></footer>
+
+  <dialog id="authDialog" class="modal auth-modal"><button class="modal-x" data-close="auth" aria-label="Закрыть">✕</button><div class="modal-overline">YOUR NEXT SCENE STARTS HERE / EN</div><h2 id="authHeading">С ВОЗВРАЩЕНИЕМ<span>!</span></h2><div class="auth-switch"><button id="tabLogin" class="active" type="button">Вход</button><button id="tabRegister" type="button">Регистрация</button></div><form id="authForm"><label>Электронная почта<input required type="email" name="email" placeholder="you@example.com" autocomplete="email" maxlength="254" /></label><label>Пароль<input required type="password" name="password" placeholder="Не менее 8 символов" autocomplete="current-password" minlength="8" maxlength="128" /></label><button class="primary-btn submit-btn" type="submit"><span id="authSubmitLabel">Войти</span><span>↗</span></button><p id="authError" class="form-feedback" role="status"></p></form><p class="auth-note">Ваши данные используются только для работы личного кабинета.</p></dialog>
+
+  <dialog id="settingsDialog" class="modal settings-modal"><button class="modal-x" data-close="settings" aria-label="Закрыть">✕</button><div class="modal-overline">PERSONAL VIEWING EXPERIENCE / SETTINGS</div><h2>НАСТРОЙКИ<span>.</span></h2><p class="modal-subtitle">Настройте просмотр под себя. Выбор сохраняется в вашем профиле или на этом устройстве.</p><div class="setting-list"><label class="setting-row"><span class="setting-label"><b>Язык озвучки</b><small>Предпочтительная аудиодорожка</small></span><select id="audioSetting"><option value="en">Английский 🇬🇧</option><option value="ru">Русский 🇷🇺</option></select></label><label class="setting-row"><span class="setting-label"><b>Качество видео</b><small>Для загруженных видеофайлов</small></span><select id="qualitySetting"><option value="auto">Автоматически</option><option value="1080p">Full HD / 1080p</option><option value="720p">HD / 720p</option><option value="480p">480p</option></select></label><label class="setting-row"><span class="setting-label"><b>Субтитры</b><small>Язык субтитров</small></span><select id="subtitleSetting"><option value="en">Английские</option><option value="ru">Русские</option><option value="off">Выключены</option></select></label><label class="setting-row"><span class="setting-label"><b>Анимация интерфейса</b><small>Уменьшить движение на сайте</small></span><input id="motionSetting" type="checkbox" class="toggle" /></label></div><p class="setting-disclaimer">Примечание: язык и качество встроенных трейлеров контролирует YouTube. Настройки аудиодорожек действуют для собственных видео с соответствующими файлами.</p><button class="primary-btn submit-btn" id="saveSettings">Сохранить настройки <span>✓</span></button><p id="settingsFeedback" class="form-feedback" role="status"></p><button id="logoutButton" class="logout-button" hidden>Выйти из аккаунта</button></dialog>
+
+  <dialog id="feedbackDialog" class="modal feedback-modal"><button class="modal-x" data-close="feedback" aria-label="Закрыть">✕</button><div class="modal-overline">LET'S TALK / FEEDBACK</div><h2>ЕСТЬ ВОПРОС<span>?</span></h2><p class="modal-subtitle">Напишите, что хотите узнать или предложить. Сообщение сохранится для команды проекта.</p><form id="feedbackForm"><label>Ваш email<input name="email" type="email" placeholder="you@example.com" maxlength="254" /></label><label>Ваше сообщение<textarea required name="message" rows="5" maxlength="2000" minlength="3" placeholder="Расскажите, чем мы можем помочь..."></textarea></label><button class="primary-btn submit-btn" type="submit">Отправить сообщение <span>↗</span></button><p id="feedbackStatus" class="form-feedback" role="status"></p></form></dialog>
+
+  <dialog id="videoDialog" class="video-modal"><div class="video-top"><div><span id="videoEyebrow">NOW PLAYING</span><h2 id="videoName">Название</h2></div><button class="video-close" data-close="video" aria-label="Закрыть видео">✕</button></div><div class="video-frame" id="videoFrame"></div><div class="video-foot"><span><i class="red-dot"></i> ОФИЦИАЛЬНЫЙ ТРЕЙЛЕР</span><span>Просмотр через YouTube · настройки качества и звука — в плеере</span></div><div class="video-actions"><button class="outline-btn" id="nextVideo">Следующий фильм ↗</button><a id="youtubeLink" href="#" target="_blank" rel="noopener noreferrer" class="video-link">Смотреть на YouTube ↗</a></div></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="/app.js" defer></script>
+</body>
+</html>
