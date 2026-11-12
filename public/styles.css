@@ -747,3 +747,58 @@ body { font-family:var(--font); font-feature-settings:'ss01' on; -webkit-font-sm
 @media(prefers-reduced-motion:reduce){
  .launch-film,.launch-cta,.launch-cta-arrow{transition:none;}
 }
+
+
+
+/* KINOCLUB V12 — official poster photography and polished premiere CTA */
+.launch-title{margin-bottom:4px;}
+.launch-poster-image{
+ position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;object-position:center;
+ z-index:1;filter:saturate(.91) contrast(1.06);transition:transform .55s cubic-bezier(.2,.7,.2,1),filter .45s ease;
+}
+.launch-film:hover .launch-poster-image{transform:scale(1.055);filter:saturate(1.04) contrast(1.03);}
+.launch-cover-intern::after,.launch-cover-taxi::after{
+ z-index:2;background:linear-gradient(180deg,rgba(8,5,13,.02) 10%,rgba(13,6,18,.05) 32%,rgba(14,8,17,.48) 61%,rgba(11,6,13,.93) 100%);
+}
+.launch-cover-intern .launch-cover-title,.launch-cover-taxi .launch-cover-title,
+.launch-cover-intern .launch-cover-bottom,.launch-cover-taxi .launch-cover-bottom{z-index:3;}
+.launch-cover-intern .launch-cover-title,.launch-cover-taxi .launch-cover-title{text-shadow:0 2px 9px #000,0 7px 18px #000c;}
+.launch-gallery-top{justify-content:flex-start;}
+.launch-gallery-bottom{justify-content:flex-start;letter-spacing:.18em;color:#efc7d2;}
+.launch-film-intern .launch-film-details,
+.launch-film-taxi .launch-film-details{padding-top:18px;}
+.launch-cta-premiere{
+ isolation:isolate;overflow:hidden;position:relative;min-width:255px;min-height:62px;gap:12px;
+ padding:9px 10px 9px 14px;
+ background:linear-gradient(110deg,#f2224d 0%,#f73a61 48%,#fe597b 72%,#f6254f 100%);
+ border:1px solid #ffb0bf;border-radius:16px;
+ box-shadow:0 12px 36px #fa2c5a6b,inset 0 1px #ffcad777;
+}
+.launch-cta-premiere::before{
+ content:"";position:absolute;pointer-events:none;top:-150%;left:-55%;width:46%;height:400%;
+ transform:rotate(26deg) translateX(-140%);background:linear-gradient(90deg,transparent,#fff8,transparent);
+ transition:transform .65s cubic-bezier(.2,.65,.1,1);
+}
+.launch-cta-premiere:hover::before{transform:rotate(26deg) translateX(440%);}
+.launch-cta-premiere:hover{box-shadow:0 20px 42px #f92c59a2;transform:translateY(-3px);}
+.launch-cta-premiere .launch-cta-copy{flex:1;position:relative;z-index:1;text-align:left;font:800 14px/1 var(--font);letter-spacing:-.015em;}
+.launch-cta-film{position:relative;z-index:1;flex:0 0 34px;width:34px;height:34px;display:grid;place-items:center;
+ border-radius:9px;background:#29131c6b;border:1px solid #ffffff60;box-shadow:inset 0 1px #ffffff55;}
+.launch-cta-film::before{content:"";width:21px;height:15px;border:1.5px solid #fff;border-radius:2px;
+ background:repeating-linear-gradient(90deg,#fff 0 4px,#2b1a29 4px 8px);transform:translateY(4px);}
+.launch-cta-film i{position:absolute;top:7px;left:6px;display:block;width:22px;height:6px;
+ border:1px solid #fff;border-radius:1px;background:repeating-linear-gradient(115deg,#fff 0 5px,#301720 5px 10px);
+ transform-origin:2px 90%;transform:rotate(-19deg);transition:transform .25s ease;}
+.launch-cta-premiere:hover .launch-cta-film i{transform:rotate(-44deg);}
+.launch-cta-premiere .launch-cta-arrow{position:relative;z-index:1;background:#ffffff32;border:1px solid #ffffff69;border-radius:11px;}
+@media(max-width:650px){
+ .launch-cta-premiere{min-height:57px;min-width:min(260px,100%);padding:8px 10px;}
+ .launch-cta-premiere .launch-cta-copy{font-size:13px;}
+ .launch-cta-film{width:30px;height:30px;flex-basis:30px;}
+ .launch-cta-film::before{transform:translateY(4px) scale(.83);}
+ .launch-cta-film i{top:6px;left:4px;}
+ .launch-film-intern .launch-film-details,.launch-film-taxi .launch-film-details{padding-top:13px;}
+}
+@media(prefers-reduced-motion:reduce){
+ .launch-poster-image,.launch-cta-premiere::before,.launch-cta-film i{transition:none;}
+}
