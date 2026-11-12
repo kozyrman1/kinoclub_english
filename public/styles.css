@@ -576,3 +576,18 @@ body { font-family:var(--font); font-feature-settings:'ss01' on; -webkit-font-sm
     font-size:6.3px;
   }
 }
+
+
+/* V6: subtle alignment under the top-left clapper */
+.header .brand-sub {left:124px;}
+.brand .brand-clapper {right:-24px;transform:rotate(7deg) scale(.88);transform-origin:center center;}
+@media(max-width:1180px) and (min-width:851px) {
+  .header .brand-sub {left:106px;}
+}
+@media(max-width:850px) {
+  .header .brand-sub {left:85px;}
+  .brand .brand-clapper {right:-22px;transform:rotate(7deg) scale(.82);}
+}
+@media(max-width:360px) {
+  .header .brand-sub {left:83px;}
+}
