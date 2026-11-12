@@ -594,3 +594,7 @@ body { font-family:var(--font); font-feature-settings:'ss01' on; -webkit-font-sm
 
 /* V7: gently lower the author signature by 3px, leaving the clapper untouched. */
 .header .brand-sub{transform:translateY(3px);}
+
+/* V8: film type tags without numbering, aligned closer to the screen's left edge. */
+.screen-card .screen-number{left:10px;}
+@media(max-width:520px){.screen-card .screen-number{left:6px;}}
