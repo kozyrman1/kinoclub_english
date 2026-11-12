@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800;900&family=Unbounded:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/styles.css?v=kinoclub-v15-method-refinement-20261113" />
+  <link rel="stylesheet" href="/styles.css?v=kinoclub-v16-visual-polish-20261113" />
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -73,8 +73,8 @@
         <h1><span class="title-top">АНГЛИЙСКИЙ</span><br/><em>КАК В</em><br/><span class="title-red">КИНО.</span></h1>
         <p>Не зубрить правила. А слышать настоящую речь, понимать любимых героев и говорить увереннее.</p>
         <div class="hero-buttons">
-          <a href="#collection" class="primary-btn"><span>Смотреть каталог</span><span class="cta-icon" aria-hidden="true">↗</span></a>
-          <a id="showHow" class="text-btn how-btn" href="/how-it-works.html"><span>Как устроен клуб</span><span class="cta-icon" aria-hidden="true">↗</span></a>
+          <a href="#collection" class="primary-btn"><span class="hero-cta-label">Смотреть каталог</span><span class="cta-icon hero-motion-icon hero-motion-film" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="15" rx="2.6"/><path d="M3 10h18M8 5l3 5M14 5l3 5"/><path d="m10 13 5 2.3-5 2.3z" fill="currentColor" stroke="none"/></svg></span></a>
+          <a id="showHow" class="text-btn how-btn" href="/how-it-works.html"><span class="hero-cta-label">Как устроен клуб</span><span class="cta-icon hero-motion-icon hero-motion-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m10 8 6 4-6 4z" fill="currentColor" stroke="none"/></svg></span></a>
         </div>
       </div>
       <div class="screen-scene" id="screenScene" aria-label="Четыре экрана с фильмами">
@@ -110,8 +110,8 @@
     </div>
 
     <section class="catalog section-wrap" id="collection">
-      <div class="section-head"><div><h2>ВЫБИРАЙТЕ<br/><span>СВОЮ ИСТОРИЮ.</span></h2></div><p>Любимый фильм может стать вашим лучшим учебником. Начните с истории, которую хочется пересматривать.</p></div>
-      <div class="catalog-toolbar"><div class="filter-tabs" role="group" aria-label="Фильтр каталога"><button class="filter active" data-filter="all">Все <sup>04</sup></button><button class="filter" data-filter="movie">Фильмы <sup>02</sup></button><button class="filter" data-filter="series">Сериалы <sup>02</sup></button></div><label class="catalog-search"><span>⌕</span><input id="catalogSearch" placeholder="Найти фильм..." type="search" autocomplete="off" aria-label="Поиск фильма" /></label></div>
+      <div class="section-head"><div><h2>ВЫБИРАЙТЕ<br/><span>ТО, ЧТО НРАВИТСЯ.</span></h2></div></div>
+      <div class="catalog-toolbar"><div class="filter-tabs" role="group" aria-label="Фильтр каталога"><button class="filter active" data-filter="all">Все</button><button class="filter" data-filter="movie">Фильмы</button><button class="filter" data-filter="series">Сериалы</button></div><label class="catalog-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.6"/><path d="m16 16 4.3 4.3"/></svg><input id="catalogSearch" placeholder="Найти фильм или сериал..." type="search" autocomplete="off" aria-label="Поиск фильма или сериала" /></label></div>
       <div class="catalog-grid" id="catalogGrid"></div><p id="noResults" class="no-results" hidden>Ничего не найдено. Попробуйте другое название.</p>
     </section>
 
@@ -119,7 +119,6 @@
       <div class="method-portrait">
         <div class="method-photo">
           <img src="/assets/lyudmila-mandel.jpg" alt="Людмила Мандель с книгой по английскому языку" width="500" height="768" loading="lazy" decoding="async" />
-          <span class="method-photo-frame" aria-hidden="true"></span>
           <span class="method-photo-glow" aria-hidden="true"></span>
         </div>
         <div class="method-author">
@@ -134,7 +133,7 @@
           <p>Я убеждена: одних правил недостаточно. Чтобы заговорить по-английски, нужно слушать живую речь, повторять за героями и говорить вслух.</p>
           <p>В КиноКлубе мы учимся слышать настоящий английский и превращать фразы из фильмов в свою речь.</p>
         </div>
-        <div class="method-quote-caption"><span class="method-line" aria-hidden="true"></span> Подход Людмилы Мандель</div>
+        
       </div>
       <div class="method-right" aria-label="Как проходят занятия в КиноКлубе">
         <div class="method-step"><span class="method-step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 4-4 4-4 8a4 4 0 0 1-8 0"/><path d="M9 10a3 3 0 0 1 6 0"/></svg></span><div><b>СЛУШАТЬ</b><p>Привыкаем к живой речи героев и ее естественному ритму.</p></div></div>
@@ -200,11 +199,11 @@
         </div>
         <span class="launch-board-grain" aria-hidden="true"></span>
       </div>
-      <p class="launch-sample-note">Анонс демонстрационный: дата старта и состав программы будут подтверждены отдельно.</p>
+      
     </section>
   </main>
 
-  <footer class="footer"><div class="footer-logo"><strong>Кино<span>Клуб.</span></strong><small>Проект Людмилы Мандель</small></div><div class="footer-links"><a href="#collection">Каталог</a><a href="/how-it-works.html">О проекте</a><button id="footerFeedback">Обратная связь</button></div><div class="footer-copy"><div class="footer-copyright">© 2026 КИНОКЛУБ</div><a class="studio-credit" href="https://idp-studio.onrender.com/" target="_blank" rel="noopener noreferrer" aria-label="Разработано IDP Studio — открыть сайт студии"><span>Разработано</span> <strong>IDP <em>STUDIO</em> <span aria-hidden="true">↗</span></strong></a></div></footer>
+  <footer class="footer"><a class="footer-logo footer-brand" href="#top" aria-label="КиноКлуб - вернуться наверх"><img src="/assets/kinoclub-logo-header.png" alt="Логотип КиноКлуба с попкорном и символом EN" width="230" height="147" loading="lazy" decoding="async" /></a><div class="footer-links"><a href="#collection">Каталог</a><a href="/how-it-works.html">О проекте</a><button id="footerFeedback">Обратная связь</button></div><div class="footer-copy"><div class="footer-copyright">© 2026 КИНОКЛУБ</div><a class="studio-credit" href="https://idp-studio.onrender.com/" target="_blank" rel="noopener noreferrer" aria-label="Разработано IDP Studio — открыть сайт студии"><span>Разработано</span> <strong>IDP <em>STUDIO</em> <span aria-hidden="true">↗</span></strong></a></div></footer>
 
   <dialog id="helpDialog" class="modal help-modal" aria-labelledby="helpTitle"><button class="modal-x" data-close="help" aria-label="Закрыть">✕</button><div class="modal-overline">WELCOME TO KINOCLUB / HELP</div><h2 id="helpTitle">КАК ЭТО <span>РАБОТАЕТ?</span></h2><p class="modal-subtitle">КиноКлуб — это английский через любимые сцены и настоящую речь героев.</p><div class="help-steps"><div><b>01</b><span>Смотрите</span><small>Выбирайте фильм или сериал в каталоге.</small></div><div><b>02</b><span>Слушайте</span><small>Разбирайте живую речь, редукции и интонацию.</small></div><div><b>03</b><span>Говорите</span><small>Тренируйте произношение и используйте фразы в своей жизни.</small></div></div><button type="button" class="primary-btn submit-btn" id="helpContact">Задать вопрос <span>↗</span></button></dialog>
 
