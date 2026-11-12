@@ -169,10 +169,38 @@ function observeHeroPreviews(){
   },{threshold:.08});
   observer.observe(scene);
 }
-function attach(){initIntro();initSeamlessTicker();const brand=$('.brand');let brandClapTimer;const clapBrand=()=>{brand.classList.remove('is-clapping');void brand.offsetWidth;brand.classList.add('is-clapping');clearTimeout(brandClapTimer);brandClapTimer=setTimeout(()=>brand.classList.remove('is-clapping'),1300)};brand.addEventListener('pointerenter',clapBrand);brand.addEventListener('pointerdown',clapBrand);brand.addEventListener('focusin',clapBrand);$('#helpTop').onclick=()=>openDialog('help');$('#helpContact').onclick=()=>{closeDialog('help');openDialog('feedback')};$('#menuToggle').onclick=()=>model.menuOpen?closeMenu():openMenu();$('#scrim').onclick=closeMenu;$$('[data-close=menu]').forEach(b=>b.onclick=closeMenu);$$('[data-nav]').forEach(b=>b.onclick=()=>onNavigate(b.dataset.nav));$$('dialog').forEach(d=>d.addEventListener('click',e=>{if(e.target===d)d.close()}));$$('[data-close]').filter(b=>b.dataset.close!=='menu').forEach(b=>b.onclick=()=>closeDialog(b.dataset.close));$('#videoDialog').addEventListener('close',()=>$('#videoFrame').replaceChildren());$('#loginTop').onclick=showAuth;$('#joinButton').onclick=()=>{if(model.me){openDialog('settings')}else{setAuthMode('register');openDialog('auth')}};$('#footerFeedback').onclick=()=>openDialog('feedback');$('#tabLogin').onclick=()=>setAuthMode('login');$('#tabRegister').onclick=()=>setAuthMode('register');$('#authForm').onsubmit=handleAuth;$('#saveSettings').onclick=handleSaveSettings;$('#logoutButton').onclick=logout;$('#feedbackForm').onsubmit=handleFeedback;$('#nextVideo').onclick=()=>openMovie(MOVIES[(model.currentMovie+1)%MOVIES.length].id);$$('.filter').forEach(b=>b.onclick=()=>{$$('.filter').forEach(x=>x.classList.remove('active'));b.classList.add('active');model.filter=b.dataset.filter;renderCatalog()});$('#catalogSearch').oninput=renderCatalog;$('#catalogGrid').addEventListener('click',e=>{const card=e.target.closest('.movie-card');if(card)openMovie(card.dataset.id)});$('#catalogGrid').addEventListener('keydown',onCardKey);$$('.screen-card').forEach(c=>{c.onclick=()=>openMovie(c.dataset.id);c.onkeydown=onCardKey});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()});
+function attach(){initIntro();initLaunchCountdown();initSeamlessTicker();const brand=$('.brand');let brandClapTimer;const clapBrand=()=>{brand.classList.remove('is-clapping');void brand.offsetWidth;brand.classList.add('is-clapping');clearTimeout(brandClapTimer);brandClapTimer=setTimeout(()=>brand.classList.remove('is-clapping'),1300)};brand.addEventListener('pointerenter',clapBrand);brand.addEventListener('pointerdown',clapBrand);brand.addEventListener('focusin',clapBrand);$('#helpTop').onclick=()=>openDialog('help');$('#helpContact').onclick=()=>{closeDialog('help');openDialog('feedback')};$('#menuToggle').onclick=()=>model.menuOpen?closeMenu():openMenu();$('#scrim').onclick=closeMenu;$$('[data-close=menu]').forEach(b=>b.onclick=closeMenu);$$('[data-nav]').forEach(b=>b.onclick=()=>onNavigate(b.dataset.nav));$$('dialog').forEach(d=>d.addEventListener('click',e=>{if(e.target===d)d.close()}));$$('[data-close]').filter(b=>b.dataset.close!=='menu').forEach(b=>b.onclick=()=>closeDialog(b.dataset.close));$('#videoDialog').addEventListener('close',()=>$('#videoFrame').replaceChildren());$('#loginTop').onclick=showAuth;$('#joinButton').onclick=()=>{if(model.me){openDialog('settings')}else{setAuthMode('register');openDialog('auth')}};$('#footerFeedback').onclick=()=>openDialog('feedback');$('#tabLogin').onclick=()=>setAuthMode('login');$('#tabRegister').onclick=()=>setAuthMode('register');$('#authForm').onsubmit=handleAuth;$('#saveSettings').onclick=handleSaveSettings;$('#logoutButton').onclick=logout;$('#feedbackForm').onsubmit=handleFeedback;$('#nextVideo').onclick=()=>openMovie(MOVIES[(model.currentMovie+1)%MOVIES.length].id);$$('.filter').forEach(b=>b.onclick=()=>{$$('.filter').forEach(x=>x.classList.remove('active'));b.classList.add('active');model.filter=b.dataset.filter;renderCatalog()});$('#catalogSearch').oninput=renderCatalog;$('#catalogGrid').addEventListener('click',e=>{const card=e.target.closest('.movie-card');if(card)openMovie(card.dataset.id)});$('#catalogGrid').addEventListener('keydown',onCardKey);$$('.screen-card').forEach(c=>{c.onclick=()=>openMovie(c.dataset.id);c.onkeydown=onCardKey});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()});
   // Gentle cursor depth on desktop; automatically disabled for reduced motion.
   const scene=$('#screenScene');scene.addEventListener('pointermove',e=>{if(matchMedia('(prefers-reduced-motion:reduce)').matches||model.settings.reducedMotion||!matchMedia('(min-width:850px)').matches)return;const box=scene.getBoundingClientRect();const x=(e.clientX-box.left)/box.width-.5,y=(e.clientY-box.top)/box.height-.5;$$('.screen-card').forEach((card,index)=>{card.style.translate=`${x*(index%2===0?-12:12)}px ${y*(index<2?-10:10)}px`})});scene.addEventListener('pointerleave',()=>$$('.screen-card').forEach(c=>c.style.translate='0px 0px'));}
 renderCatalog();monitorImages();attach();syncUser();
 // Начинаем загрузку немых видеофонов сразу, пока видна заставка.
 // На устройствах с Reduced Motion / Data Saver сохраняем постеры.
 setTimeout(startHeroPreviews,120);
+
+
+/* Countdown uses a fixed example start date, so it does NOT reset to seven days for each visitor. */
+function initLaunchCountdown(){
+  const root=document.getElementById('launchCountdown');
+  if(!root)return;
+  const target=Date.parse('2026-11-20T19:00:00+03:00');
+  const days=document.getElementById('launchDays'),hours=document.getElementById('launchHours'),
+    minutes=document.getElementById('launchMinutes'),seconds=document.getElementById('launchSeconds'),
+    label=document.getElementById('launchDateLabel');
+  const pad=n=>String(n).padStart(2,'0');
+  let handle;
+  function update(){
+    const left=Math.max(0,target-Date.now());
+    const allSeconds=Math.floor(left/1000);
+    days.textContent=pad(Math.floor(allSeconds/86400));
+    hours.textContent=pad(Math.floor(allSeconds%86400/3600));
+    minutes.textContent=pad(Math.floor(allSeconds%3600/60));
+    seconds.textContent=pad(allSeconds%60);
+    if(left<=0){
+      label.textContent='Дата следующего потока уточняется';
+      root.setAttribute('aria-label','Предварительная дата старта прошла. Дата нового потока уточняется');
+      if(handle)clearInterval(handle);
+    }
+  }
+  update();
+  handle=setInterval(update,1000);
+}

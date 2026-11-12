@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800;900&family=Unbounded:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/styles.css?v=kinoclub-v10-title-baseline-20261113" />
+  <link rel="stylesheet" href="/styles.css?v=kinoclub-v11-launch-board-20261113" />
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -117,7 +117,69 @@
 
     <section id="method" class="method-section section-wrap"><div class="method-left"><div class="section-kicker">НЕ ПРОСТО КИНО / НАСТОЯЩИЙ АНГЛИЙСКИЙ</div><h2>СЛУШАЙТЕ.<br/>ПОВТОРЯЙТЕ.<br/><span>ГОВОРИТЕ.</span></h2><p>В центре занятий - живая речь героев. Разбираем, как слова соединяются в потоке, тренируем произношение и переносим фразы в собственную жизнь.</p><div class="signature">Проект Людмилы Мандель <span>✳</span></div></div><div class="method-right"><div class="method-step"><span>01</span><div><b>ПОНЯТЬ</b><p>Слушаем и замечаем детали речи, которые раньше ускользали.</p></div><span>↗</span></div><div class="method-step"><span>02</span><div><b>ПРОИЗНЕСТИ</b><p>Connected speech, редукции, интонация и shadowing.</p></div><span>↗</span></div><div class="method-step"><span>03</span><div><b>АКТИВИРОВАТЬ</b><p>Забираем полезные фразы из сцены в активный словарь.</p></div><span>↗</span></div><div class="method-step"><span>04</span><div><b>ГОВОРИТЬ</b><p>Обсуждаем близкие темы и начинаем говорить свободнее.</p></div><span>↗</span></div></div></section>
 
-    <section class="join-section section-wrap"><div class="join-inner"><span class="section-kicker">THE NEXT SCENE IS YOURS.</span><h2>ПОРА ВЫЙТИ<br/><em>В КАДР.</em></h2><p>Создайте аккаунт, выберите свою историю и начните путешествие в английский.</p><button class="light-btn" id="joinButton">Присоединиться <span>↗</span></button><div class="join-stamp">ENGLISH<br/>IS A<br/>MOVIE ✳</div></div></section>
+    
+    <!-- Анонс: дата и фильмы пока демонстрационные, таймер привязан к одной фиксированной дате. -->
+    <section class="launch-section section-wrap" id="nextLaunch" aria-labelledby="launchTitle">
+      <div class="launch-board">
+        <div class="launch-info">
+          <div class="launch-eyebrow"><span class="launch-live-dot"></span> СКОРО В КИНОКЛУБЕ <span class="launch-serial">/ НОВЫЙ ПОТОК</span></div>
+          <h2 class="launch-title" id="launchTitle">НОВЫЕ ФИЛЬМЫ.<br /><span>НОВЫЙ АНГЛИЙСКИЙ.</span></h2>
+          <div class="launch-divider" aria-hidden="true"></div>
+          <div class="launch-time-head"><span>ДО СТАРТА ОСТАЛОСЬ</span><span class="launch-clock-glyph" aria-hidden="true">◷</span></div>
+          <div class="launch-countdown" id="launchCountdown" role="timer" aria-label="Обратный отсчет до предварительной даты старта">
+            <div class="launch-time-cell"><strong id="launchDays">07</strong><span>ДНЕЙ</span></div>
+            <span class="launch-time-separator" aria-hidden="true">:</span>
+            <div class="launch-time-cell"><strong id="launchHours">00</strong><span>ЧАСОВ</span></div>
+            <span class="launch-time-separator" aria-hidden="true">:</span>
+            <div class="launch-time-cell"><strong id="launchMinutes">00</strong><span>МИНУТ</span></div>
+            <span class="launch-time-separator" aria-hidden="true">:</span>
+            <div class="launch-time-cell"><strong id="launchSeconds">00</strong><span>СЕКУНД</span></div>
+          </div>
+          <p class="launch-description">Три фильма. Живые диалоги. Английский, который вы действительно будете использовать. Два названия уже известны — третье раскроем позже.</p>
+          <div class="launch-cta-row">
+            <button class="launch-cta" id="joinButton" type="button"><span>Присоединиться</span><span class="launch-cta-arrow" aria-hidden="true">↗</span></button>
+            <span class="launch-date" id="launchDateLabel">Предварительная дата: 20 ноября, 19:00 МСК</span>
+          </div>
+        </div>
+        <div class="launch-gallery" aria-label="Фильмы нового потока">
+          <div class="launch-gallery-top"><span>СЛЕДУЮЩИЕ В ПРОГРАММЕ</span><span>01 — 03</span></div>
+          <div class="launch-film-grid">
+            <article class="launch-film launch-film-intern">
+              <div class="launch-cover launch-cover-intern" role="img" aria-label="Стилизованная афиша фильма Стажер">
+                <div class="launch-cover-glow" aria-hidden="true"></div>
+                <div class="intern-windows" aria-hidden="true"></div>
+                <div class="intern-figure" aria-hidden="true"><i></i></div>
+                <div class="launch-cover-title">THE<br />INTERN</div>
+                <span class="launch-cover-bottom">2015 / FILM</span>
+              </div>
+              <div class="launch-film-details"><span>ФИЛЬМ 01</span><h3>Стажер</h3><p>The Intern</p></div>
+            </article>
+            <article class="launch-film launch-film-mystery">
+              <div class="launch-cover launch-cover-mystery" role="img" aria-label="Третий фильм-сюрприз: название еще не раскрыто">
+                <span class="mystery-stars" aria-hidden="true">✦</span>
+                <span class="mystery-question" aria-hidden="true">?</span>
+                <div class="mystery-caption">COMING<br />SOON</div>
+                <span class="launch-cover-bottom">TOP SECRET</span>
+              </div>
+              <div class="launch-film-details"><span>СЮРПРИЗ</span><h3>Фильм-загадка</h3><p>Скоро раскроем</p></div>
+            </article>
+            <article class="launch-film launch-film-taxi">
+              <div class="launch-cover launch-cover-taxi" role="img" aria-label="Стилизованная афиша фильма Такси">
+                <div class="taxi-lights" aria-hidden="true"></div>
+                <div class="taxi-road" aria-hidden="true"></div>
+                <div class="taxi-silhouette" aria-hidden="true"><i class="taxi-roof"></i><i class="taxi-window"></i><i class="taxi-wheel taxi-wheel-left"></i><i class="taxi-wheel taxi-wheel-right"></i></div>
+                <div class="launch-cover-title taxi-word">TAXI</div>
+                <span class="launch-cover-bottom">1998 / FILM</span>
+              </div>
+              <div class="launch-film-details"><span>ФИЛЬМ 02</span><h3>Такси</h3><p>Taxi</p></div>
+            </article>
+          </div>
+          <div class="launch-gallery-bottom"><span>WATCH IT. HEAR IT. SAY IT.</span><span class="launch-gallery-icon" aria-hidden="true">✳</span></div>
+        </div>
+        <span class="launch-board-grain" aria-hidden="true"></span>
+      </div>
+      <p class="launch-sample-note">Анонс демонстрационный: дата старта и состав программы будут подтверждены отдельно.</p>
+    </section>
   </main>
 
   <footer class="footer"><div class="footer-logo"><strong>Кино<span>Клуб.</span></strong><small>Проект Людмилы Мандель</small></div><div class="footer-links"><a href="#collection">Каталог</a><a href="/how-it-works.html">О проекте</a><button id="footerFeedback">Обратная связь</button></div><div class="footer-copy"><div class="footer-copyright">© 2026 КИНОКЛУБ</div><a class="studio-credit" href="https://idp-studio.onrender.com/" target="_blank" rel="noopener noreferrer" aria-label="Разработано IDP Studio — открыть сайт студии"><span>Разработано</span> <strong>IDP <em>STUDIO</em> <span aria-hidden="true">↗</span></strong></a></div></footer>
@@ -132,6 +194,6 @@
 
   <dialog id="videoDialog" class="video-modal"><div class="video-top"><div><span id="videoEyebrow">NOW PLAYING</span><h2 id="videoName">Название</h2></div><button class="video-close" data-close="video" aria-label="Закрыть видео">✕</button></div><div class="video-frame" id="videoFrame"></div><div class="video-foot"><span><i class="red-dot"></i> ОФИЦИАЛЬНЫЙ ТРЕЙЛЕР</span><span>Просмотр через YouTube · настройки качества и звука — в плеере</span></div><div class="video-actions"><button class="outline-btn" id="nextVideo">Следующий фильм ↗</button><a id="youtubeLink" href="#" target="_blank" rel="noopener noreferrer" class="video-link">Смотреть на YouTube ↗</a></div></dialog>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script src="/app.js?v=kinoclub-v4-buttons" defer></script>
+  <script src="/app.js?v=kinoclub-v11-launch-board-20261113" defer></script>
 </body>
 </html>
